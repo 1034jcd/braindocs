@@ -18,6 +18,8 @@ services:
         value: price_1U1ekLPOPXDmUKH9ZFZ6V7PL
       - key: STRIPE_PRICE_LIFETIME
         value: price_1U1ekMPOPXDmUKH9zzpSdrwU
+      - key: STRIPE_PRICE_BUSINESS
+        value: price_1U1epTPOPXDmUKH9ra0QoO8U
       - key: GEMINI_API_KEY
         sync: false
       - key: GMAIL_USER

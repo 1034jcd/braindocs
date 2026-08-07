@@ -42,3 +42,11 @@ Routine: 20 personalized messages/day → ~5 replies → ~2–3 paid unlocks (�
 
 ## 5. Founder-access loop
 - "Request a template" section (index) + email 1034jcd@gmail.com. Ship requested templates within 24h to build evangelists.
+
+## 6. $1M scale roadmap (executing)
+**B2B-first pricing (live):** Base $3.99 · Pro $19/mo · Business White-Label $49/mo (logo on PDFs, saved history) · Founder Lifetime $49 (cap 50).
+- Volume math: 333 businesses × $250/mo = $1M ARR → we target contractors/property managers/auto shops via niche pages + outreach, not consumers.
+- Lock-in moat (live): Saved Documents history in localStorage + white-label branding raise switching cost; Pro/Business get 50 saved, free gets 3.
+- Portfolio multiplier: `pages.js` + `renderLanding()` are the modular engine. Each niche (mechanic, roofer, plumber…) is data, not code — 85% shared. New niche variant = new data row + (optionally) a re-branded service. Launch strategy: after BrainDocs hits ~$3k/mo, spin up 2–3 niche variants (e.g. DetailPro, TradeQuotes) from this same repo.
+- Expansion revenue (future): SMS/WhatsApp client notifications (~$0.10/text, needs paid SMS API), custom-domain white-label ($50–100/mo, needs Render paid plan).
+- Exit: at $15–20k/mo ARR with near-zero churn, portfolio is worth ~4–5x ARR ($700k–$1.2M) on Acquire.com/Flippa.

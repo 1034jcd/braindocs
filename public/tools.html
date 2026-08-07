@@ -120,6 +120,12 @@
         <button id="buy-lifetime-3" class="primary">Buy — $49</button>
       </div>
       <div class="plan">
+        <h3>Business</h3>
+        <p class="price">$49<span>/mo</span></p>
+        <ul><li>White-label: your logo on PDFs</li><li>Unlimited AI tools</li><li>Priority template requests</li></ul>
+        <button id="buy-business-t" class="primary">Go Business — $49/mo</button>
+      </div>
+      <div class="plan">
         <h3>Pro</h3>
         <p class="price">$19<span>/mo</span></p>
         <ul><li>Unlimited AI tools</li><li>Unlimited watermark-free PDFs</li><li>Cancel anytime · 14-day refund</li></ul>
@@ -294,6 +300,7 @@
   ["buy-lifetime", "buy-lifetime-2", "buy-lifetime-3"].forEach(function (id) {
     document.getElementById(id).addEventListener("click", function () { checkout("lifetime"); });
   });
+  document.getElementById("buy-business-t").addEventListener("click", function () { checkout("business"); });
   ["buy-pro", "buy-pro-2", "buy-pro-3"].forEach(function (id) {
     document.getElementById(id).addEventListener("click", function () { checkout("pro"); });
   });

@@ -6,6 +6,7 @@ Professional documents in seconds. Invoices, quotes/estimates, and Texas landlor
 - **Single** — $3.99 one-time, one watermark-free PDF
 - **Pro** — $19/mo, unlimited watermark-free PDFs + AI tools, cancel anytime
 - **Lifetime Pass** — $49 one-time (first 50 buyers), unlimited forever
+- **Business (White-Label)** — $49/mo: your logo on every PDF, saved history, unlimited everything
 
 Part of the **BrainAdvisor** family of apps → https://brainadvisor.onrender.com
 
@@ -24,14 +25,14 @@ Part of the **BrainAdvisor** family of apps → https://brainadvisor.onrender.co
 ```bash
 npm install
 PORT=10000 PUBLIC_BASE_URL=http://localhost:10000 \
-STRIPE_SECRET_KEY=... STRIPE_PRICE_SINGLE=... STRIPE_PRICE_PRO=... STRIPE_PRICE_LIFETIME=... \
+STRIPE_SECRET_KEY=... STRIPE_PRICE_SINGLE=... STRIPE_PRICE_PRO=... STRIPE_PRICE_LIFETIME=... STRIPE_PRICE_BUSINESS=... \
 STRIPE_WEBHOOK_SECRET=... GMAIL_USER=... GMAIL_APP_PASSWORD=... OWNER_EMAIL=... GEMINI_API_KEY=... \
 node server.js
 ```
 
 ## Deploy (Render)
 Web service, Node runtime, build `npm install --production`, start `node server.js`, health check `/api/healthz`.
-Required env: `PUBLIC_BASE_URL`, `STRIPE_SECRET_KEY`, `STRIPE_PRICE_SINGLE`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_LIFETIME`, `STRIPE_WEBHOOK_SECRET`, `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `OWNER_EMAIL`. Optional: `GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL`, `AI_MODEL`, `ZEN_MODEL`.
+Required env: `PUBLIC_BASE_URL`, `STRIPE_SECRET_KEY`, `STRIPE_PRICE_SINGLE`, `STRIPE_PRICE_PRO`, `STRIPE_PRICE_LIFETIME`, `STRIPE_PRICE_BUSINESS`, `STRIPE_WEBHOOK_SECRET`, `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `OWNER_EMAIL`. Optional: `GEMINI_API_KEY`, `DEEPSEEK_API_KEY`, `DEEPSEEK_MODEL`, `AI_MODEL`, `ZEN_MODEL`.
 
 ## Legal
 Templates are general-purpose, informational documents — not legal advice, not affiliated with any court or agency. 14-day refund policy. Payments handled by Stripe; card details never touch this server.

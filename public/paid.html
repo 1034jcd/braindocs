@@ -67,6 +67,9 @@
     } else if (type === "lifetime") {
       localStorage.setItem("braindocs_unlock", JSON.stringify({ type: "lifetime" }));
       unlockEl.textContent = "👑 Lifetime Pass is active — unlimited PDFs and AI tools, forever.";
+    } else if (type === "business") {
+      localStorage.setItem("braindocs_unlock", JSON.stringify({ type: "business" }));
+      unlockEl.textContent = "🏢 Business is active — white-label branding, unlimited PDFs and AI tools.";
     } else {
       localStorage.setItem("braindocs_unlock", JSON.stringify({ type: "single", downloadsLeft: 1 }));
       unlockEl.textContent = "🧾 Single-document credit is active — 1 watermark-free download.";

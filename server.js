@@ -17,6 +17,7 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET ?? "";
 const priceSingle = process.env.STRIPE_PRICE_SINGLE ?? "";
 const pricePro = process.env.STRIPE_PRICE_PRO ?? "";
 const priceLifetime = process.env.STRIPE_PRICE_LIFETIME ?? "";
+const priceBusiness = process.env.STRIPE_PRICE_BUSINESS ?? "";
 const baseUrl = (process.env.PUBLIC_BASE_URL ?? `http://localhost:${PORT}`).replace(/\/+$/, "");
 const ownerEmail = process.env.OWNER_EMAIL ?? "1034jcd@gmail.com";
 
@@ -25,7 +26,7 @@ function getStripe() {
   if (!stripe && secretKey) stripe = new Stripe(secretKey);
   return stripe;
 }
-const isConfigured = Boolean(secretKey && (priceSingle || pricePro || priceLifetime));
+const isConfigured = Boolean(secretKey && (priceSingle || pricePro || priceLifetime || priceBusiness));
 
 app.use(express.json({ verify: (req, _res, buf) => { req.rawBody = buf; } }));
 app.use(express.static(path.join(here, "public")));
@@ -55,6 +56,7 @@ app.post("/api/stripe/checkout", checkoutLimiter, async (req, res) => {
   let isSubscription = false;
   if (mode === "pro") { price = pricePro; isSubscription = true; }
   if (mode === "lifetime") { price = priceLifetime; isSubscription = false; }
+  if (mode === "business") { price = priceBusiness; isSubscription = true; }
   if (!price) return res.status(500).json({ ok: false, message: "No price configured for this option." });
 
   try {

@@ -120,15 +120,17 @@ function watermark(page, font, unlocked, type) {
 }
 
 // ── Build the PDF ───────────────────────────────────────────────────────────
-async function generatePDF() {
+async function generatePDF(opts) {
   const status = document.getElementById("status");
+  const noSave = Boolean(opts && opts.noSave);
   status.textContent = "Building PDF…";
   status.className = "status";
   try {
     const unlock = getUnlock();
-    const biz = document.getElementById("f_biz").value || "Your Business";
-    const email = document.getElementById("f_email").value || "";
-    const phone = document.getElementById("f_phone").value || "";
+    const brand = getBrand();
+    const biz = document.getElementById("f_biz").value || brand.biz || "Your Business";
+    const email = document.getElementById("f_email").value || brand.email || "";
+    const phone = document.getElementById("f_phone").value || brand.phone || "";
     const client = document.getElementById("f_client").value || "";
     const num = document.getElementById("f_num").value || "DOC-0001";
     const date = document.getElementById("f_date").value || "";
@@ -145,8 +147,20 @@ async function generatePDF() {
 
     // header band
     page.drawRectangle({ x: 0, y: 740, width: W, height: 52, color: COLORS.accent });
-    page.drawText("BrainDocs", { x: 50, y: 758, size: 18, font: bold, color: rgb(0.02, 0.13, 0.18) });
-    page.drawText("by BrainAdvisor", { x: 50, y: 744, size: 8, font, color: rgb(0.02, 0.13, 0.18) });
+    let hx = 50;
+    if (brand.logo) {
+      try {
+        const b64 = brand.logo.split(",")[1];
+        const raw = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+        const img = brand.logo.startsWith("data:image/png") ? await doc.embedPng(raw) : await doc.embedJpg(raw);
+        const ratio = img.height / img.width;
+        const hw = 96, hh = Math.min(38, hw * ratio);
+        page.drawImage(img, { x: hx, y: 755 - hh, width: hw, height: hh });
+        hx += hw + 10;
+      } catch (e) { console.error("logo embed failed", e); }
+    }
+    page.drawText("BrainDocs", { x: hx, y: 758, size: 18, font: bold, color: rgb(0.02, 0.13, 0.18) });
+    page.drawText("by BrainAdvisor", { x: hx, y: 744, size: 8, font, color: rgb(0.02, 0.13, 0.18) });
 
     let y = 690;
     if (currentTemplate === "notice") {
@@ -191,7 +205,7 @@ async function generatePDF() {
       page.drawText("Generated with BrainDocs by BrainAdvisor — brainadvisor.onrender.com", { x: 50, y: 58, size: 8, font, color: COLORS.gray });
     }
 
-    watermark(page, font, unlock && (unlock.type === "pro" || unlock.type === "lifetime" || unlock.downloadsLeft > 0), unlock?.type);
+    watermark(page, font, unlock && (unlock.type === "pro" || unlock.type === "lifetime" || unlock.type === "business" || unlock.downloadsLeft > 0), unlock?.type);
 
     const bytes = await doc.save();
     const blob = new Blob([bytes], { type: "application/pdf" });
@@ -208,6 +222,7 @@ async function generatePDF() {
       if (unlock.downloadsLeft <= 0) localStorage.removeItem("braindocs_unlock");
       else localStorage.setItem("braindocs_unlock", JSON.stringify(unlock));
     }
+    if (!noSave) saveHistory();
 
     status.textContent = "PDF downloaded" + (isUnlocked() ? "" : " (watermarked — remove it for $3.99)");
     refreshUnlockUI();
@@ -224,7 +239,7 @@ function getUnlock() {
 }
 function isUnlocked() {
   const u = getUnlock();
-  return Boolean(u && (u.type === "pro" || u.type === "lifetime" || u.downloadsLeft > 0));
+  return Boolean(u && (u.type === "pro" || u.type === "lifetime" || u.type === "business" || u.downloadsLeft > 0));
 }
 function refreshUnlockUI() {
   const u = getUnlock();
@@ -234,7 +249,7 @@ function refreshUnlockUI() {
   if (u) {
     badge.id = "unlock-badge";
     badge.style.cssText = "position:fixed;bottom:14px;right:14px;z-index:99;background:#04202e;color:#00e5ff;border:1px solid #00e5ff;border-radius:999px;padding:8px 14px;font-size:0.8rem;font-weight:700;";
-    badge.textContent = u.type === "pro" ? "⚡ Pro — unlimited PDFs" : u.type === "lifetime" ? "👑 Lifetime Pass — unlimited" : "🧾 " + u.downloadsLeft + " download(s) left";
+    badge.textContent = u.type === "pro" ? "⚡ Pro — unlimited PDFs" : u.type === "lifetime" ? "👑 Lifetime Pass — unlimited" : u.type === "business" ? "🏢 Business — white-label" : "🧾 " + u.downloadsLeft + " download(s) left";
     document.body.appendChild(badge);
   }
 }
@@ -416,6 +431,77 @@ function restoreFromHashOrDraft() {
   }
 }
 
+
+// ── Branding (white-label) + saved documents (lock-in) ──────────────────────
+function getBrand() {
+  try { return JSON.parse(localStorage.getItem("braindocs_brand") || "{}"); } catch { return {}; }
+}
+function saveBrand(extra) {
+  const b = Object.assign({}, getBrand(), extra || {});
+  localStorage.setItem("braindocs_brand", JSON.stringify(b));
+  return b;
+}
+function loadBrandUI() {
+  const b = getBrand();
+  const biz = document.getElementById("b_biz");
+  const em = document.getElementById("b_email");
+  const ph = document.getElementById("b_phone");
+  const logo = document.getElementById("b_logo");
+  if (biz) biz.value = b.biz || "";
+  if (em) em.value = b.email || "";
+  if (ph) ph.value = b.phone || "";
+  if (logo) logo.value = "";
+  const prev = document.getElementById("b_logo_preview");
+  if (prev) {
+    prev.src = b.logo || "";
+    prev.style.display = b.logo ? "block" : "none";
+  }
+}
+function isBusiness() { const u = getUnlock(); return Boolean(u && u.type === "business"); }
+
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem("braindocs_history") || "[]"); } catch { return []; }
+}
+function saveHistory() {
+  const state = collectState();
+  const total = readItems().reduce((s2, i) => s2 + i.qty * i.rate, 0);
+  const limit = isUnlocked() ? 50 : 3;
+  let list = getHistory();
+  list.unshift({ id: Date.now(), num: state.num || "DOC", tpl: state.tpl, date: state.date || "", total, createdAt: new Date().toISOString(), state });
+  list = list.slice(0, limit);
+  localStorage.setItem("braindocs_history", JSON.stringify(list));
+  renderHistory();
+}
+function renderHistory() {
+  const box = document.getElementById("history");
+  if (!box) return;
+  const list = getHistory();
+  if (!list.length) { box.innerHTML = '<p class="hint">Documents you generate appear here — reopen or re-download them anytime. Saved locally on this device.</p>'; return; }
+  let html = "";
+  list.forEach(function (h) {
+    html += "<div class='hist-item'><span class='hist-main'>" + String(h.num).replace(/</g, "&lt;") + " · " + fmtMoney(h.total) + " · " + String(h.tpl).toUpperCase() + "</span><span class='hist-sub'>" + h.date + "</span>"
+      + "<span class='hist-actions'><button data-act='open' data-id='" + h.id + "' class='ghost small'>Open</button> <button data-act='dl' data-id='" + h.id + "' class='ghost small'>PDF</button> <button data-act='del' data-id='" + h.id + "' class='ghost small danger'>✕</button></span></div>";
+  });
+  box.innerHTML = html;
+  box.querySelectorAll("button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      const id = Number(b.dataset.id);
+      const item = getHistory().find((x) => x.id === id);
+      if (!item) return;
+      if (b.dataset.act === "open") {
+        hydrate(item.state);
+        document.getElementById("builder").scrollIntoView({ behavior: "smooth" });
+      } else if (b.dataset.act === "dl") {
+        hydrate(item.state);
+        generatePDF({ noSave: true });
+      } else {
+        localStorage.setItem("braindocs_history", JSON.stringify(getHistory().filter((x) => x.id !== id)));
+        renderHistory();
+      }
+    });
+  });
+}
+
 // ── Wire up ─────────────────────────────────────────────────────────────────
 document.querySelectorAll(".tab").forEach((b) =>
   b.addEventListener("click", () => setTemplate(b.dataset.tpl)));
@@ -430,9 +516,28 @@ document.getElementById("share").addEventListener("click", copyShareLink);
 document.getElementById("buy-single").addEventListener("click", () => startCheckout("single"));
 document.getElementById("buy-pro").addEventListener("click", () => startCheckout("pro"));
 document.getElementById("buy-lifetime").addEventListener("click", () => startCheckout("lifetime"));
+const buyBiz = document.getElementById("buy-business");
+if (buyBiz) buyBiz.addEventListener("click", () => startCheckout("business"));
 
 setTemplate("invoice");
 updateTotal();
 renderPreview();
 restoreFromHashOrDraft();
+loadBrandUI();
+renderHistory();
 refreshUnlockUI();
+
+const bBiz = document.getElementById("b_biz");
+const bEm = document.getElementById("b_email");
+const bPh = document.getElementById("b_phone");
+const bLogo = document.getElementById("b_logo");
+if (bBiz) bBiz.addEventListener("input", () => saveBrand({ biz: bBiz.value }));
+if (bEm) bEm.addEventListener("input", () => saveBrand({ email: bEm.value }));
+if (bPh) bPh.addEventListener("input", () => saveBrand({ phone: bPh.value }));
+if (bLogo) bLogo.addEventListener("change", () => {
+  const f = bLogo.files[0];
+  if (!f) return;
+  const r = new FileReader();
+  r.onload = () => { saveBrand({ logo: r.result }); loadBrandUI(); };
+  r.readAsDataURL(f);
+});

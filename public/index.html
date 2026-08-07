@@ -57,6 +57,18 @@
 
       <label>Notes <textarea id="f_notes" rows="2" placeholder="Optional notes…"></textarea></label>
 
+      <details class="brand-box">
+        <summary>🏢 Your branding (Business / white-label)</summary>
+        <div class="grid">
+          <label>Business name <input id="b_biz" placeholder="Auto-fills your PDFs"></label>
+          <label>Email <input id="b_email" type="email" placeholder="you@business.com"></label>
+          <label>Phone <input id="b_phone" placeholder="(210) 555-0123"></label>
+        </div>
+        <label>Logo <input id="b_logo" type="file" accept="image/png,image/jpeg"></label>
+        <img id="b_logo_preview" alt="Logo preview" style="display:none;max-height:48px;margin-top:8px;">
+        <p class="hint">Your logo appears on every PDF. Part of the Business White-Label plan — <a href="#pricing">$49/mo</a>.</p>
+      </details>
+
       <label>Industry preset
         <select id="preset">
           <option value="generic">Generic / other</option>
@@ -98,6 +110,11 @@
     <div id="preview" class="pv"></div>
   </section>
 
+  <section class="card">
+    <h2>Saved Documents</h2>
+    <div id="history"></div>
+  </section>
+
   <section id="pricing" class="card">
     <h2>Pricing</h2>
     <div class="plans">
@@ -111,6 +128,12 @@
         <p class="price">$3.99</p>
         <ul><li>One watermark-free PDF</li><li>All templates</li><li>Instant download</li></ul>
         <button id="buy-single" class="primary">Buy — $3.99</button>
+      </div>
+      <div class="plan">
+        <h3>Business</h3>
+        <p class="price">$49<span>/mo</span></p>
+        <ul><li>White-label: your logo on every PDF</li><li>Unlimited PDFs + AI tools</li><li>Saved history · priority templates</li><li>Cancel anytime · 14-day refund</li></ul>
+        <button id="buy-business" class="primary">Go Business — $49/mo</button>
       </div>
       <div class="plan">
         <h3>Lifetime Pass</h3>
