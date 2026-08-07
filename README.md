@@ -3,9 +3,9 @@
 Professional documents in seconds. Invoices, quotes/estimates, and Texas landlord notices (3-Day Notice). Fill a form, download a clean PDF. No designer, no lawyer, no hassle.
 
 - **Free** — all 3 templates, watermarked PDF
-- **Single** — $2.99 one-time, one watermark-free PDF
-- **Pro** — $9/mo, unlimited watermark-free PDFs + AI tools, cancel anytime
-- **Lifetime Pass** — $19 one-time (first 50 buyers), unlimited forever
+- **Single** — $3.99 one-time, one watermark-free PDF
+- **Pro** — $19/mo, unlimited watermark-free PDFs + AI tools, cancel anytime
+- **Lifetime Pass** — $49 one-time (first 50 buyers), unlimited forever
 
 Part of the **BrainAdvisor** family of apps → https://brainadvisor.onrender.com
 

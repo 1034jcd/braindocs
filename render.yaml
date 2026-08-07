@@ -13,11 +13,11 @@ services:
       - key: PUBLIC_BASE_URL
         value: https://braindocs-7qqx.onrender.com
       - key: STRIPE_PRICE_SINGLE
-        value: price_1U1eURPOPXDmUKH9EsW8eGs2
+        value: price_1U1ekKPOPXDmUKH9VplAoeGZ
       - key: STRIPE_PRICE_PRO
-        value: price_1U1eUSPOPXDmUKH9Tr6zyZCn
+        value: price_1U1ekLPOPXDmUKH9ZFZ6V7PL
       - key: STRIPE_PRICE_LIFETIME
-        value: price_1U1ehSPOPXDmUKH9ymSSosf5
+        value: price_1U1ekMPOPXDmUKH9zzpSdrwU
       - key: GEMINI_API_KEY
         sync: false
       - key: GMAIL_USER

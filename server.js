@@ -4,6 +4,7 @@ import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 import https from "node:https";
 import http from "node:http";
+import { PAGES, pageUrl } from "./pages.js";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -262,6 +263,129 @@ app.post("/api/ai/estimate", aiLimiter, async (req, res) => {
     console.error("ai estimate failed:", err.message);
     res.status(502).json({ ok: false, message: "Could not read the photo — try a clearer picture, or try again in a minute." });
   }
+});
+
+
+// ── Programmatic SEO landing pages ──────────────────────────────────────────
+function builderHash(state) {
+  return Buffer.from(JSON.stringify(state), "utf8").toString("base64");
+}
+
+function renderLanding(p) {
+  const { svc, n, loc } = p;
+  const base = "https://braindocs-7qqx.onrender.com";
+  const hash = builderHash({
+    tpl: svc.tpl, preset: "generic", biz: "", email: "", phone: "",
+    client: "Client", num: svc.tpl === "invoice" ? "INV-0001" : "Q-0001",
+    date: "", due: "", notes: `Pre-filled ${svc.label.toLowerCase()} template for ${n.label.toLowerCase()} work in ${loc.city}, ${loc.state}.`,
+    items: n.items,
+  });
+  const builderLink = `${base}/#doc=${hash}`;
+  const desc = `Create a professional ${n.label} ${svc.title.toLowerCase()} for ${loc.city}, ${loc.state} in 30 seconds. Itemized line items, clean PDF, no account needed. $3.99 per document or $19/mo unlimited.`;
+  const itemRows = n.items.map((it) => `<tr><td>${it.desc}</td><td>${it.qty}</td><td>$${Number(it.rate).toFixed(2)}</td></tr>`).join("");
+  const faqs = [
+    { q: `How do I make a ${n.label.toLowerCase()} ${svc.title.toLowerCase()} in ${loc.city}?`, a: `Open the builder with the pre-filled ${n.label.toLowerCase()} template, adjust the line items and rates, and click Generate PDF. It takes about 30 seconds and no account is required.` },
+    { q: `How much does it cost?`, a: `Each watermark-free document is $3.99. The Pro plan is $19/month for unlimited documents and AI tools, with a 14-day refund.` },
+    { q: `Is this a legal document service?`, a: `No. BrainDocs generates general-purpose business documents for informational use. It is not legal advice and is not affiliated with any court or agency.` },
+    { q: `Can I customize the template for my ${n.label.toLowerCase()} business?`, a: `Yes — every line item, rate, quantity, and note is editable, and you can request a custom template by emailing 1034jcd@gmail.com.` },
+  ];
+  const faqHtml = faqs.map((f) => `<h3>${f.q}</h3><p>${f.a}</p>`).join("");
+  const faqSchema = JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faqs.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })) });
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${p.title}</title>
+<meta name="description" content="${desc}">
+<link rel="canonical" href="${pageUrl(p)}">
+<meta property="og:title" content="${p.title}">
+<meta property="og:description" content="${desc}">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+<link rel="stylesheet" href="/style.css">
+<script type="application/ld+json">${faqSchema}</script>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a class="family-mark" href="https://brainadvisor.onrender.com" target="_blank" rel="noopener"><img src="/brainadvisor-logo.svg" alt="BrainAdvisor" class="ba-logo"></a>
+    <span class="wordmark">Brain<span class="accent">Docs</span></span>
+    <span class="family-badge">by BrainAdvisor</span>
+  </div>
+  <nav><a href="/">🧾 Builder</a> <a href="/tools.html">🧠 AI Tools</a></nav>
+</header>
+<main>
+  <section class="hero">
+    <h1>${n.label} ${svc.h1} for ${loc.city}, ${loc.state}</h1>
+    <p>Generate a clean, itemized ${n.label.toLowerCase()} ${svc.label.toLowerCase()} for ${loc.city} in 30 seconds — pre-filled with common ${n.label.toLowerCase()} line items and rates. No account, no signup, instant PDF download.</p>
+    <p><a href="${builderLink}" class="primary" style="display:inline-block;text-decoration:none;padding:12px 26px;border-radius:10px;font-weight:700;">Start free — build your ${svc.label.toLowerCase()} →</a></p>
+  </section>
+
+  <section class="card">
+    <h2>What you get</h2>
+    <ul>
+      <li>Pre-filled ${n.label.toLowerCase()} line items (editable)</li>
+      <li>Clean, professional PDF — matches your entries exactly</li>
+      <li>Free watermarked preview; $3.99 removes the watermark</li>
+      <li>Pro ($19/mo) = unlimited documents + AI tools, 14-day refund</li>
+      <li>Works on any phone, tablet, or computer — no app install</li>
+    </ul>
+    <h2>Sample line items</h2>
+    <table class="pv-table" style="background:#fff;color:#10151d;border-radius:8px;">
+      <thead><tr><th style="color:#6b7688;">Description</th><th style="color:#6b7688;">Qty</th><th style="color:#6b7688;">Rate</th></tr></thead>
+      <tbody>${itemRows}</tbody>
+    </table>
+    <p class="hint">Everything is editable — change rates, add or remove lines, add your business name and contact info.</p>
+  </section>
+
+  <section class="card">
+    <h2>How it works</h2>
+    <p><strong>1.</strong> Open the pre-filled ${n.label.toLowerCase()} template. <strong>2.</strong> Adjust line items and add your business details. <strong>3.</strong> Click Generate PDF and download instantly.</p>
+    <p><a href="${builderLink}" class="primary" style="display:inline-block;text-decoration:none;padding:12px 26px;border-radius:10px;font-weight:700;">Build it now — $3.99 to remove watermark</a></p>
+  </section>
+
+  <section class="card">
+    <h2>${n.label}s in ${loc.city}, ${loc.state}</h2>
+    <p>${loc.city} is a busy market for independent ${n.label.toLowerCase()}s. A fast, professional ${svc.label.toLowerCase()} builds trust before the first job — and a clean PDF beats a text-message quote every time. BrainDocs lets you create one in seconds, on-site, between calls.</p>
+    <p class="fineprint">BrainDocs is not affiliated with any local, state, or federal agency. These are general-purpose templates, not legal documents.</p>
+  </section>
+
+  <section class="card legal">
+    <h2>Common questions</h2>
+    ${faqHtml}
+  </section>
+</main>
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" class="ba-logo small">
+    <span>BrainDocs is part of the <strong>BrainAdvisor</strong> family of apps</span>
+  </div>
+  <p>BrainDocs — professional documents in seconds · For general use. Not legal advice.</p>
+</footer>
+</body>
+</html>`;
+}
+
+app.get("/l/:slug", (req, res) => {
+  const p = PAGES.find((x) => x.slug === req.params.slug);
+  if (!p) return res.status(404).send("Page not found.");
+  res.setHeader("Cache-Control", "public, max-age=3600");
+  res.send(renderLanding(p));
+});
+
+app.get("/sitemap.xml", (_req, res) => {
+  const urls = PAGES.map((p) => `  <url><loc>${pageUrl(p)}</loc><changefreq>monthly</changefreq></url>`).join("\n");
+  res.type("application/xml").send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://braindocs-7qqx.onrender.com/</loc><changefreq>weekly</changefreq></url>
+  <url><loc>https://braindocs-7qqx.onrender.com/tools.html</loc><changefreq>weekly</changefreq></url>
+${urls}
+</urlset>`);
+});
+
+app.get("/robots.txt", (_req, res) => {
+  res.type("text/plain").send("User-agent: *\nAllow: /\nSitemap: https://braindocs-7qqx.onrender.com/sitemap.xml\n");
 });
 
 app.get("/paid", (_req, res) => {

@@ -114,7 +114,7 @@ function watermark(page, font, unlocked, type) {
   page.drawText("PREVIEW", {
     x: 170, y: 340, size: 96, font, color: COLORS.red, opacity: 0.16, rotate: degrees(35),
   });
-  page.drawText("Watermark-free download — $2.99 or go Pro", {
+  page.drawText("Watermark-free download — $3.99 or go Pro", {
     x: 50, y: 40, size: 9, font, color: COLORS.gray,
   });
 }
@@ -209,7 +209,7 @@ async function generatePDF() {
       else localStorage.setItem("braindocs_unlock", JSON.stringify(unlock));
     }
 
-    status.textContent = "PDF downloaded" + (isUnlocked() ? "" : " (watermarked — remove it for $2.99)");
+    status.textContent = "PDF downloaded" + (isUnlocked() ? "" : " (watermarked — remove it for $3.99)");
     refreshUnlockUI();
   } catch (err) {
     console.error(err);
@@ -429,6 +429,7 @@ document.getElementById("doc-form").addEventListener("submit", (e) => { e.preven
 document.getElementById("share").addEventListener("click", copyShareLink);
 document.getElementById("buy-single").addEventListener("click", () => startCheckout("single"));
 document.getElementById("buy-pro").addEventListener("click", () => startCheckout("pro"));
+document.getElementById("buy-lifetime").addEventListener("click", () => startCheckout("lifetime"));
 
 setTemplate("invoice");
 updateTotal();
