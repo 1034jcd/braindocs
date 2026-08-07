@@ -24,7 +24,7 @@ function stripe(qs) {
   const candidates = (sessions.data || []).filter(s => s.customer_email && s.customer_email.includes('@') && s.mode === 'payment');
   console.log('Unpaid sessions (48h):', (sessions.data || []).length, '| with email:', candidates.length);
   if (!candidates.length || !process.env.SMTP_PASS) { console.log('Nothing to recover.'); process.exit(0); }
-  const nodemailer = require(path.join(__dirname, '..', 'node_modules', 'nodemailer'));
+  const nodemailer = require('nodemailer');
   const t = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 587, secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
   const seen = new Set();
   for (const s of candidates) {

@@ -75,11 +75,11 @@ async function main() {
     fs.mkdirSync(path.dirname(outH), { recursive: true });
     fs.writeFileSync(outH, linesHooks.join('\n'));
     console.log('Hooks file:', outH);
-    const nodemailerH = require(path.join(ROOT, 'node_modules', 'nodemailer'));
+    const nodemailerH = require('nodemailer');
     if (process.env.SMTP_USER && process.env.SMTP_PASS && process.env.ADMIN_EMAIL) {
       try {
         const t = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 587, secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
-        await t.sendMail({ from: process.env.SMTP_USER, to: process.env.ADMIN_EMAIL, subject: '📣 ${APP_NAME} daily post hooks', text: linesHooks.join('\n') });
+        await t.sendMail({ from: process.env.SMTP_USER, to: process.env.ADMIN_EMAIL, subject: `📣 ${APP_NAME} daily post hooks`, text: linesHooks.join('\n') });
         console.log('Hooks emailed.');
       } catch (e) { console.error('Email failed:', e.message); }
     }
@@ -101,7 +101,7 @@ async function main() {
 
   if (process.env.SMTP_USER && process.env.SMTP_PASS && process.env.ADMIN_EMAIL) {
     try {
-      const nodemailer = require(path.join(ROOT, 'node_modules', 'nodemailer'));
+      const nodemailer = require('nodemailer');
       const t = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 587, secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
       await t.sendMail({ from: process.env.SMTP_USER, to: process.env.ADMIN_EMAIL, subject: '🐦 Reddit leads — review before posting', text: lines.join('\n') });
       console.log('Emailed review file to', process.env.ADMIN_EMAIL);

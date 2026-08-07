@@ -49,7 +49,7 @@ async function main() {
 
   if (unique.length && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.ADMIN_EMAIL) {
     try {
-      const nodemailer = require(path.join(ROOT, 'node_modules', 'nodemailer'));
+      const nodemailer = require('nodemailer');
       const t = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 587, secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
       await t.sendMail({ from: process.env.SMTP_USER, to: process.env.ADMIN_EMAIL, subject: '⚠️ SECURITY SCAN: potential leaks in repo', text: lines.join('\n') });
       console.log('Alert emailed.');

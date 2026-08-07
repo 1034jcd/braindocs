@@ -65,7 +65,7 @@ async function main() {
 
   if (SEND) {
     if (!process.env.SMTP_USER || !process.env.SMTP_PASS) { console.log('--send requires SMTP_USER/SMTP_PASS. Skipping send.'); process.exit(0); }
-    const nodemailer = require(path.join(ROOT, 'node_modules', 'nodemailer'));
+    const nodemailer = require('nodemailer');
     const t = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 587, secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
     const batch = sent.filter(p => p.email && p.email.includes('@')).slice(0, DAILY_CAP);
     console.log('Sending', batch.length, 'emails (cap ' + DAILY_CAP + '/day).');
