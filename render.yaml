@@ -11,7 +11,7 @@ services:
       - key: NODE_ENV
         value: production
       - key: PUBLIC_BASE_URL
-        value: https://braindocs.onrender.com
+        value: https://braindocs-7qqx.onrender.com
       - key: STRIPE_PRICE_SINGLE
         value: price_1U1eURPOPXDmUKH9EsW8eGs2
       - key: STRIPE_PRICE_PRO
