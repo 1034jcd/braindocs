@@ -54,6 +54,23 @@ jobs:
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
         run: NODE_PATH=/tmp/mkt-deps/node_modules node scripts/social-listen.cjs
 
+  abandoned-recovery:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.schedule == '30 13 * * *' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          mkdir -p /tmp/rec-deps
+          npm install --prefix /tmp/rec-deps nodemailer --no-save --no-audit --no-fund
+      - name: Send abandoned-checkout reminders
+        env:
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        run: NODE_PATH=/tmp/rec-deps/node_modules node scripts/abandoned-recovery.cjs
+
   security-scan:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '0 9 * * 1' || github.event_name == 'workflow_dispatch' }}

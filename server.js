@@ -111,14 +111,12 @@ app.post("/api/stripe/webhook", async (req, res) => {
     console.log("payment completed", s.id, amount, s.customer_email);
     const m = mailer();
     if (m) {
-      try {
-        await m.sendMail({
-          from: `"BrainDocs" <${process.env.GMAIL_USER}>`,
-          to: ownerEmail,
-          subject: `🧾 BrainDocs — New payment $${amount.toFixed(2)}`,
-          text: `Payment completed!\nSession: ${s.id}\nAmount: $${amount.toFixed(2)}\nEmail: ${s.customer_email ?? "n/a"}\nMode: ${s.metadata?.mode ?? "n/a"}`,
-        });
-      } catch (e) { console.error("notify email failed", e.message); }
+      m.sendMail({
+        from: `"BrainDocs" <${process.env.GMAIL_USER}>`,
+        to: ownerEmail,
+        subject: `🧾 BrainDocs — New payment $${amount.toFixed(2)}`,
+        text: `Payment completed!\nSession: ${s.id}\nAmount: $${amount.toFixed(2)}\nEmail: ${s.customer_email ?? "n/a"}\nMode: ${s.metadata?.mode ?? "n/a"}`,
+      }).then(() => console.log("notify email sent")).catch((e) => console.error("notify email failed", e.message));
     }
   }
   res.json({ received: true });
