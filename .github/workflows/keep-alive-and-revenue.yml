@@ -15,23 +15,32 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
         run: |
-          url="https://braindocs.onrender.com/api/healthz"
+          url="https://braindocs-7qqx.onrender.com/api/healthz"
           code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$url" || echo DOWN)
           if [ "$code" != "200" ]; then
             echo "$url cold-start retry..."
-            sleep 4
+            sleep 5
             code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$url" || echo DOWN)
           fi
           echo "$url -> $code"
           if [ "$code" != "200" ]; then
+            echo "DOWN: $url ($code)"
+            export DOWN_VAR="$url($code)"
             if [ -n "$SMTP_USER" ] && [ -n "$SMTP_PASS" ] && [ -n "$REPORT_TO" ]; then
-              npm install --prefix /tmp/ka nodemailer --no-save --no-audit --no-fund --silent
-              export DOWN_VAR="$url($code)"
-              NODE_PATH=/tmp/ka/node_modules node -e "
-                const nm=require('nodemailer');
-                const t=nodemailer.createTransport({host:'smtp.gmail.com',port:587,secure:false,auth:{user:process.env.SMTP_USER,pass:process.env.SMTP_PASS}});
-                t.sendMail({from:process.env.SMTP_USER,to:process.env.REPORT_TO,subject:'DOWN ALERT: BrainDocs',text:'Health check failed for: '+process.env.DOWN_VAR}).then(()=>console.log('alert sent')).catch(e=>console.error('alert email failed',e.message));
-              "
+              python3 - "$REPORT_TO" <<'PY'
+import smtplib, os, sys
+from email.mime.text import MIMEText
+msg = MIMEText("Health check failed for: " + os.environ.get("DOWN_VAR", "unknown"))
+msg["Subject"] = "DOWN ALERT: BrainDocs"
+msg["From"] = os.environ["SMTP_USER"]
+msg["To"] = sys.argv[1]
+try:
+    s = smtplib.SMTP("smtp.gmail.com", 587); s.starttls()
+    s.login(os.environ["SMTP_USER"], os.environ["SMTP_PASS"]); s.send_message(msg); s.quit()
+    print("alert sent")
+except Exception as e:
+    print("alert failed:", e)
+PY
             fi
             exit 1
           fi

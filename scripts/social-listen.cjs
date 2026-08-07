@@ -32,7 +32,7 @@ function get(url) {
 
 function gemini(system, user) {
   return new Promise((resolve, reject) => {
-    const body = JSON.stringify({ system_instruction: { parts: [{ text: system }] }, contents: [{ parts: [{ text: user }] }], generationConfig: { temperature: 0.7, maxOutputTokens: 400 } });
+    const body = JSON.stringify({ system_instruction: { parts: [{ text: system }] }, contents: [{ parts: [{ text: user }] }], generationConfig: { temperature: 0.8, maxOutputTokens: 1500 } });
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${encodeURIComponent(SK)}`;
     const req = https.request(url, { method: 'POST', headers: { 'Content-Type': 'application/json' } }, (res) => {
       let d = '';
@@ -65,7 +65,7 @@ async function main() {
   console.log('Found', posts.length, 'candidate posts.');
   if (!posts.length) {
     console.log('No Reddit candidates today — generating daily post hooks instead.');
-    const systemHooks = `You are the social media manager for ${APP_NAME}. Write 5 short social posts (under 280 characters each) with hooks about the pain of manual paperwork, each ending with the link ${APP_LINK}. Natural, not spammy, no emoji spam.`;
+    const systemHooks = `You are the social media manager for ${APP_NAME} — a 30-second document builder for trades and small service businesses (mechanics, plumbers, roofers, cleaners, contractors, food trucks). It makes itemized estimates, invoices, and quotes with pre-filled niche line items, downloadable as clean PDFs. NOT for medical, legal, or clinical use. Write 5 short social posts (under 280 characters each) with hooks about the pain of hand-writing quotes/invoices in the field, slow payment, or messy paperwork — each ending with the link ${APP_LINK}. Natural, not spammy, no emoji spam, no claims about clinical or medical anything.`;
     const linesHooks = ['# Daily post hooks — ' + new Date().toISOString().split('T')[0], ''];
     try {
       const raw = await gemini(systemHooks, 'Write the 5 posts as a numbered list, one per line.');
