@@ -188,7 +188,7 @@ async function generatePDF() {
         page.drawText("Notes", { x: 50, y: ny, size: 9, font: bold, color: COLORS.gray });
         drawLines(page, notes, font, 9, 50, ny - 14, 500);
       }
-      page.drawText("Generated with BrainDocs by BrainAdvisor", { x: 50, y: 58, size: 8, font, color: COLORS.gray });
+      page.drawText("Generated with BrainDocs by BrainAdvisor — brainadvisor.onrender.com", { x: 50, y: 58, size: 8, font, color: COLORS.gray });
     }
 
     watermark(page, font, unlock && (unlock.type === "pro" || unlock.downloadsLeft > 0), unlock?.type);
@@ -313,6 +313,109 @@ function addItemRow(desc, qty, rate) {
   document.getElementById("items").appendChild(row);
 }
 
+
+// ── State: autosave, share links, live preview ──────────────────────────────
+function collectState() {
+  const g = (id) => document.getElementById(id)?.value || "";
+  return {
+    tpl: currentTemplate,
+    preset: g("preset"),
+    biz: g("f_biz"), email: g("f_email"), phone: g("f_phone"),
+    client: g("f_client"), num: g("f_num"), date: g("f_date"), due: g("f_due"),
+    notes: g("f_notes"), items: readItems(),
+    tenant: g("f_tenant"), addr: g("f_addr"), rent: g("f_rent"), rentdue: g("f_rentdue"),
+  };
+}
+
+function hydrate(st) {
+  if (!st || typeof st !== "object") return;
+  setTemplate(st.tpl === "notice" ? "notice" : (st.tpl === "quote" ? "quote" : "invoice"));
+  const set = (id, v) => { const el = document.getElementById(id); if (el && v !== undefined) el.value = v; };
+  set("preset", st.preset || "generic");
+  set("f_biz", st.biz); set("f_email", st.email); set("f_phone", st.phone);
+  set("f_client", st.client); set("f_num", st.num); set("f_date", st.date); set("f_due", st.due);
+  set("f_notes", st.notes);
+  set("f_tenant", st.tenant); set("f_addr", st.addr); set("f_rent", st.rent); set("f_rentdue", st.rentdue);
+  const rows = document.getElementById("items");
+  rows.innerHTML = "";
+  (Array.isArray(st.items) && st.items.length ? st.items : [{ desc: "Labor / service", qty: 1, rate: 100 }])
+    .forEach((it) => addItemRow(it.desc, it.qty, it.rate));
+  updateTotal();
+  renderPreview();
+}
+
+function saveDraft() {
+  try { localStorage.setItem("braindocs_draft", JSON.stringify(collectState())); } catch (e) {}
+}
+
+function renderPreview() {
+  const pv = document.getElementById("preview");
+  if (!pv) return;
+  const st = collectState();
+  const esc = (v) => String(v ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const row = (it) => "<tr><td>" + esc(it.desc) + "</td><td>" + Number(it.qty || 0) + "</td><td>" + fmtMoney(it.rate) + "</td><td>" + fmtMoney(it.qty * it.rate) + "</td></tr>";
+  let html = "";
+  if (st.tpl === "notice") {
+    html = "<div class='pv-head'><span>BrainDocs</span><span class='pv-brand'>by BrainAdvisor</span></div>"
+      + "<h4 class='pv-title pv-red'>TEXAS THREE-DAY NOTICE TO PAY RENT OR VACATE</h4>"
+      + "<p><strong>TO:</strong> " + esc(st.tenant || "Tenant") + "</p>"
+      + "<p><strong>RE:</strong> " + esc(st.addr || "Property address") + "</p>"
+      + "<p>You are hereby notified that you owe " + fmtMoney(st.rent) + " in unpaid rent for the above property, due on " + esc(st.rentdue || st.date || "—") + ". Unless the full amount is paid within three (3) days from the date this notice is served, your lease will terminate and eviction proceedings may be filed against you.</p>"
+      + "<p><strong>Dated:</strong> " + esc(st.date) + "<br><strong>Landlord / Agent:</strong> " + esc(st.biz) + "</p>";
+  } else {
+    const title = st.tpl === "invoice" ? "INVOICE" : "QUOTE / ESTIMATE";
+    const meta = [esc(st.num), "Date: " + esc(st.date), st.due ? (st.tpl === "invoice" ? "Due: " : "Valid until: ") + esc(st.due) : ""].filter(Boolean).join("   ·   ");
+    html = "<div class='pv-head'><span>BrainDocs</span><span class='pv-brand'>by BrainAdvisor</span></div>"
+      + "<h4 class='pv-title'>" + title + "</h4><p class='pv-meta'>" + meta + "</p>"
+      + "<div class='pv-parties'><div><p class='pv-k'>FROM</p><p>" + esc(st.biz) + "</p><p class='pv-muted'>" + esc(st.email) + "  " + esc(st.phone) + "</p></div>"
+      + "<div><p class='pv-k'>TO</p><p>" + esc(st.client) + "</p></div></div>"
+      + "<table class='pv-table'><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>"
+      + st.items.map(row).join("") + "</tbody></table>"
+      + "<p class='pv-total'>TOTAL <span>" + fmtMoney(st.items.reduce((s2, i) => s2 + i.qty * i.rate, 0)) + "</span></p>"
+      + (st.notes ? "<p class='pv-k'>Notes</p><p>" + esc(st.notes) + "</p>" : "");
+  }
+  pv.innerHTML = html + "<p class='pv-foot'>Generated with BrainDocs by BrainAdvisor — brainadvisor.onrender.com</p>";
+}
+
+function buildShareLink() {
+  try {
+    const data = btoa(unescape(encodeURIComponent(JSON.stringify(collectState()))));
+    return location.origin + location.pathname + "#doc=" + data;
+  } catch (e) { return location.href; }
+}
+
+function copyShareLink() {
+  const link = buildShareLink();
+  const done = () => {
+    const toast = document.getElementById("toast");
+    toast.textContent = "🔗 Link copied — send it to a client or colleague!";
+    toast.hidden = false;
+    setTimeout(() => { toast.hidden = true; }, 2600);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(link).then(done).catch(() => { prompt("Copy this link:", link); done(); });
+  } else {
+    prompt("Copy this link:", link);
+    done();
+  }
+}
+
+function restoreFromHashOrDraft() {
+  let shared = null;
+  try {
+    const m = location.hash.match(/#doc=([^&]+)/);
+    if (m) shared = JSON.parse(decodeURIComponent(escape(atob(m[1]))));
+  } catch (e) {}
+  if (shared) {
+    hydrate(shared);
+    try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+  } else {
+    let draft = null;
+    try { draft = JSON.parse(localStorage.getItem("braindocs_draft") || "null"); } catch (e) {}
+    if (draft && document.getElementById("f_biz")) hydrate(draft);
+  }
+}
+
 // ── Wire up ─────────────────────────────────────────────────────────────────
 document.querySelectorAll(".tab").forEach((b) =>
   b.addEventListener("click", () => setTemplate(b.dataset.tpl)));
@@ -321,11 +424,14 @@ document.getElementById("preset").addEventListener("change", (e) => loadPreset(e
 document.querySelectorAll(".item-row .remove-item").forEach((b) =>
   b.addEventListener("click", () => { b.closest(".item-row").remove(); updateTotal(); }));
 document.querySelectorAll("#items input").forEach((i) => i.addEventListener("input", updateTotal));
-document.getElementById("doc-form").addEventListener("input", updateTotal);
+document.getElementById("doc-form").addEventListener("input", () => { updateTotal(); renderPreview(); saveDraft(); });
 document.getElementById("doc-form").addEventListener("submit", (e) => { e.preventDefault(); generatePDF(); });
+document.getElementById("share").addEventListener("click", copyShareLink);
 document.getElementById("buy-single").addEventListener("click", () => startCheckout("single"));
 document.getElementById("buy-pro").addEventListener("click", () => startCheckout("pro"));
 
 setTemplate("invoice");
 updateTotal();
+renderPreview();
+restoreFromHashOrDraft();
 refreshUnlockUI();

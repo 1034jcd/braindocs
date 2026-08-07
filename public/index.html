@@ -84,9 +84,18 @@
 
       <div id="status" class="status"></div>
 
-      <button type="submit" id="gen" class="primary">Generate PDF</button>
-      <p class="fineprint">Free downloads include a small preview watermark. <a href="#pricing">Remove it for $2.99</a> or go Pro.</p>
+      <div class="gen-row">
+        <button type="submit" id="gen" class="primary">Generate PDF</button>
+        <button type="button" id="share" class="ghost">🔗 Copy share link</button>
+      </div>
+      <p class="fineprint">Free downloads include a small preview watermark. <a href="#pricing">Remove it for $2.99</a> or go Pro. Share links preserve your draft — no account needed.</p>
     </form>
+  </section>
+
+  <section class="card">
+    <h2>Live Preview</h2>
+    <p class="hint">See your document build as you type — the PDF matches this exactly (minus the watermark when you unlock it).</p>
+    <div id="preview" class="pv"></div>
   </section>
 
   <section id="pricing" class="card">
