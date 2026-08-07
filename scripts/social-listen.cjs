@@ -8,6 +8,8 @@ const https = require('https');
 const SK = process.env.GEMINI_API_KEY || '';
 const MODEL = process.env.AI_MODEL || 'gemini-3.5-flash';
 const ROOT = path.join(__dirname, '..');
+const APP_NAME = process.env.APP_NAME || 'BrainDocs';
+const APP_LINK = process.env.APP_LINK || 'https://braindocs-7qqx.onrender.com';
 
 const KEYWORDS = ['quote template', 'estimate software', 'invoice app', 'how do I make an invoice', 'estimate sheet', 'free quote generator', 'invoice for small business', 'make an invoice'];
 const SUBS = ['smallbusiness', 'Entrepreneur', 'Construction', 'Plumbing', 'MechanicAdvice', 'landscaping', 'freelance', 'sweatystartup'];
@@ -63,7 +65,7 @@ async function main() {
   console.log('Found', posts.length, 'candidate posts.');
   if (!posts.length) {
     console.log('No Reddit candidates today — generating daily post hooks instead.');
-    const systemHooks = 'You are the social media manager for BrainDocs, a free 30-second estimate/invoice builder for trades. Write 5 short social posts (under 280 characters each) with hooks about the pain of hand-writing quotes, each ending with the link https://braindocs-7qqx.onrender.com. Natural, not spammy, no emoji spam.';
+    const systemHooks = `You are the social media manager for ${APP_NAME}. Write 5 short social posts (under 280 characters each) with hooks about the pain of manual paperwork, each ending with the link ${APP_LINK}. Natural, not spammy, no emoji spam.`;
     const linesHooks = ['# Daily post hooks — ' + new Date().toISOString().split('T')[0], ''];
     try {
       const raw = await gemini(systemHooks, 'Write the 5 posts as a numbered list, one per line.');
@@ -77,13 +79,13 @@ async function main() {
     if (process.env.SMTP_USER && process.env.SMTP_PASS && process.env.ADMIN_EMAIL) {
       try {
         const t = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 587, secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
-        await t.sendMail({ from: process.env.SMTP_USER, to: process.env.ADMIN_EMAIL, subject: '📣 BrainDocs daily post hooks', text: linesHooks.join('\n') });
+        await t.sendMail({ from: process.env.SMTP_USER, to: process.env.ADMIN_EMAIL, subject: '📣 ${APP_NAME} daily post hooks', text: linesHooks.join('\n') });
         console.log('Hooks emailed.');
       } catch (e) { console.error('Email failed:', e.message); }
     }
     process.exit(0);
   }
-  const system = 'You draft a helpful Reddit reply for a free tool (BrainDocs, a 30-second estimate/invoice builder for trades). Rules: never start with "hey", never sound like an ad; first acknowledge their actual problem from the post text; offer the tool as a free option with link https://braindocs-7qqx.onrender.com; under 90 words; no fake claims.';
+  const system = `You draft a helpful Reddit reply for a free tool (${APP_NAME}). Rules: never start with "hey", never sound like an ad; first acknowledge their actual problem from the post text; offer the tool as a free option with link ${APP_LINK}; under 90 words; no fake claims.`;
   const lines = ['# Social listening — ' + new Date().toISOString().split('T')[0], ''];
   for (const p of posts.slice(0, 12)) {
     try {
