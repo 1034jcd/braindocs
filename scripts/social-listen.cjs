@@ -78,7 +78,7 @@ async function main() {
     const nodemailerH = require('nodemailer');
     if (process.env.SMTP_USER && process.env.SMTP_PASS && process.env.ADMIN_EMAIL) {
       try {
-        const t = nodemailer.createTransport({ host: 'smtp.gmail.com', port: 587, secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
+        const t = nodemailerH.createTransport({ host: 'smtp.gmail.com', port: 587, secure: false, auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } });
         await t.sendMail({ from: process.env.SMTP_USER, to: process.env.ADMIN_EMAIL, subject: `📣 ${APP_NAME} daily post hooks`, text: linesHooks.join('\n') });
         console.log('Hooks emailed.');
       } catch (e) { console.error('Email failed:', e.message); }

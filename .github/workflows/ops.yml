@@ -42,15 +42,15 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/mkt-deps
-          npm install --prefix /tmp/mkt-deps nodemailer --no-save --no-audit --no-fund
-          npm install --prefix /tmp/mkt-deps helmet --no-save --no-audit --no-fund --silent || true
+          npm install --no-save --no-audit --no-fund nodemailer
+          npm install --no-save --no-audit --no-fund helmet --silent || true
       - name: Social listening + daily hooks
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/mkt-deps/node_modules node scripts/social-listen.cjs
+        run: node scripts/social-listen.cjs
 
   abandoned-recovery:
     runs-on: ubuntu-latest
@@ -60,14 +60,14 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/rec-deps
-          npm install --prefix /tmp/rec-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Send abandoned-checkout reminders
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/rec-deps/node_modules node scripts/abandoned-recovery.cjs
+        run: node scripts/abandoned-recovery.cjs
 
   indexnow-submit:
     runs-on: ubuntu-latest
@@ -85,13 +85,13 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/sec-deps
-          npm install --prefix /tmp/sec-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Scan for leaked secrets
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/sec-deps/node_modules node scripts/security-scan.cjs || true
+        run: node scripts/security-scan.cjs || true
 
   revenue-report:
     runs-on: ubuntu-latest
@@ -101,11 +101,11 @@ jobs:
       - name: Install deps
         run: |
           mkdir -p /tmp/revenue-deps
-          npm install --prefix /tmp/revenue-deps nodemailer --no-save --no-audit --no-fund
+          npm install --no-save --no-audit --no-fund nodemailer
       - name: Send daily revenue report
         env:
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           SMTP_USER: ${{ secrets.SMTP_USER }}
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
-        run: NODE_PATH=/tmp/revenue-deps/node_modules node scripts/revenue-report.cjs
+        run: node scripts/revenue-report.cjs
