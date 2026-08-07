@@ -1,5 +1,6 @@
 name: BrainDocs ops (keep-alive, revenue, alerts)
 on:
+  # refreshed 2026-08-07 to pick up workflow_dispatch trigger
   schedule:
     - cron: '*/10 * * * *'   # keep-alive ping
     - cron: '45 8 * * *'     # daily revenue email
