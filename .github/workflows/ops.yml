@@ -29,19 +29,19 @@ jobs:
             export DOWN_VAR="$url($code)"
             if [ -n "$SMTP_USER" ] && [ -n "$SMTP_PASS" ] && [ -n "$REPORT_TO" ]; then
               python3 - "$REPORT_TO" <<'PY'
-import smtplib, os, sys
-from email.mime.text import MIMEText
-msg = MIMEText("Health check failed for: " + os.environ.get("DOWN_VAR", "unknown"))
-msg["Subject"] = "DOWN ALERT: BrainDocs"
-msg["From"] = os.environ["SMTP_USER"]
-msg["To"] = sys.argv[1]
-try:
-    s = smtplib.SMTP("smtp.gmail.com", 587); s.starttls()
-    s.login(os.environ["SMTP_USER"], os.environ["SMTP_PASS"]); s.send_message(msg); s.quit()
-    print("alert sent")
-except Exception as e:
-    print("alert failed:", e)
-PY
+              import smtplib, os, sys
+              from email.mime.text import MIMEText
+              msg = MIMEText("Health check failed for: " + os.environ.get("DOWN_VAR", "unknown"))
+              msg["Subject"] = "DOWN ALERT: BrainDocs"
+              msg["From"] = os.environ["SMTP_USER"]
+              msg["To"] = sys.argv[1]
+              try:
+                  s = smtplib.SMTP("smtp.gmail.com", 587); s.starttls()
+                  s.login(os.environ["SMTP_USER"], os.environ["SMTP_PASS"]); s.send_message(msg); s.quit()
+                  print("alert sent")
+              except Exception as e:
+                  print("alert failed:", e)
+              PY
             fi
             exit 1
           fi
