@@ -71,6 +71,14 @@ jobs:
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
         run: NODE_PATH=/tmp/rec-deps/node_modules node scripts/abandoned-recovery.cjs
 
+  indexnow-submit:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.schedule == '15 8 * * 1' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resubmit pSEO URLs to IndexNow
+        run: node scripts/indexnow.cjs
+
   security-scan:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '0 9 * * 1' || github.event_name == 'workflow_dispatch' }}
