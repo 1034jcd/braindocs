@@ -392,6 +392,40 @@ function renderPreview() {
   pv.innerHTML = html + "<p class='pv-foot'>Generated with BrainDocs by BrainAdvisor — brainadvisor.onrender.com</p>";
 }
 
+function shareWhatsApp() {
+  const link = buildShareLink();
+  const st = collectState();
+  const msg = encodeURIComponent("Hi " + (st.client || "there") + " — here is your " + (st.tpl === "invoice" ? "invoice" : "quote") + " (" + st.num + ") from " + (st.biz || "our business") + ". You can view it here: " + link);
+  window.open("https://wa.me/?text=" + msg, "_blank", "noopener");
+}
+
+function shareEmail() {
+  const st = collectState();
+  const link = buildShareLink();
+  const subject = encodeURIComponent((st.tpl === "invoice" ? "Invoice" : "Quote") + " " + st.num + " from " + (st.biz || "our business"));
+  const body = encodeURIComponent("Hi " + (st.client || "") + ",\n\nHere is your " + (st.tpl === "invoice" ? "invoice" : "quote") + ". You can open it instantly here — no account needed:\n" + link + "\n\nBest,\n" + (st.biz || "") + "\n" + (st.email || "") + " " + (st.phone || ""));
+  window.location.href = "mailto:?subject=" + subject + "&body=" + body;
+}
+
+function exportCSV() {
+  const st = collectState();
+  const rows = [["Description", "Qty", "Rate", "Amount"]];
+  st.items.forEach(function (it) {
+    rows.push([String(it.desc).replace(/"/g, '""'), it.qty, Number(it.rate).toFixed(2), (it.qty * it.rate).toFixed(2)]);
+  });
+  const total = st.items.reduce((s2, i2) => s2 + i2.qty * i2.rate, 0);
+  rows.push(["", "", "TOTAL", total.toFixed(2)]);
+  const csv = "\uFEFF" + rows.map((r) => r.map((c) => '"' + String(c) + '"').join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = (st.num || "braindocs") + ".csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+
 function buildShareLink() {
   try {
     const data = btoa(unescape(encodeURIComponent(JSON.stringify(collectState()))));
@@ -513,6 +547,9 @@ document.querySelectorAll("#items input").forEach((i) => i.addEventListener("inp
 document.getElementById("doc-form").addEventListener("input", () => { updateTotal(); renderPreview(); saveDraft(); });
 document.getElementById("doc-form").addEventListener("submit", (e) => { e.preventDefault(); generatePDF(); });
 document.getElementById("share").addEventListener("click", copyShareLink);
+document.getElementById("share-wa").addEventListener("click", shareWhatsApp);
+document.getElementById("share-email").addEventListener("click", shareEmail);
+document.getElementById("export-csv").addEventListener("click", exportCSV);
 document.getElementById("buy-single").addEventListener("click", () => startCheckout("single"));
 document.getElementById("buy-pro").addEventListener("click", () => startCheckout("pro"));
 document.getElementById("buy-lifetime").addEventListener("click", () => startCheckout("lifetime"));
