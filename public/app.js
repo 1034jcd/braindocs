@@ -264,17 +264,60 @@ async function startCheckout(mode) {
   }
 }
 
-// ── Wire up ─────────────────────────────────────────────────────────────────
-document.querySelectorAll(".tab").forEach((b) =>
-  b.addEventListener("click", () => setTemplate(b.dataset.tpl)));
-document.getElementById("add-item").addEventListener("click", () => {
+
+// ── Niche presets (hyper-niche positioning) ─────────────────────────────────
+const PRESETS = {
+  generic: {
+    label: "Generic / other",
+    items: [{ desc: "Labor / service", qty: 1, rate: 100.0 }],
+  },
+  mechanic: {
+    label: "Mobile auto mechanic",
+    items: [
+      { desc: "Mobile service call", qty: 1, rate: 49.0 },
+      { desc: "Diagnostic scan", qty: 1, rate: 65.0 },
+      { desc: "Labor (per hour)", qty: 1, rate: 95.0 },
+      { desc: "Oil change — parts + oil", qty: 1, rate: 42.0 },
+      { desc: "Brake pads (set) + labor", qty: 1, rate: 165.0 },
+    ],
+  },
+  plumber: {
+    label: "Independent plumber",
+    items: [
+      { desc: "Service call", qty: 1, rate: 65.0 },
+      { desc: "Labor (per hour)", qty: 1, rate: 110.0 },
+      { desc: "Fixture installation", qty: 1, rate: 89.0 },
+      { desc: "Water heater repair", qty: 1, rate: 150.0 },
+      { desc: "Parts & materials (at cost)", qty: 1, rate: 0.0 },
+    ],
+  },
+};
+
+function loadPreset(name) {
+  const p = PRESETS[name] || PRESETS.generic;
+  const rows = document.getElementById("items");
+  rows.innerHTML = "";
+  p.items.forEach((it) => addItemRow(it.desc, it.qty, it.rate));
+  document.getElementById("preset").value = name;
+  updateTotal();
+}
+
+function addItemRow(desc, qty, rate) {
   const row = document.createElement("div");
   row.className = "item-row";
   row.innerHTML = '<input class="i-desc" placeholder="Description"><input class="i-qty" type="number" min="0" value="1"><input class="i-rate" type="number" min="0" step="0.01" value="0"><button type="button" class="remove-item">✕</button>';
+  row.querySelector(".i-desc").value = desc || "";
+  row.querySelector(".i-qty").value = qty ?? 1;
+  row.querySelector(".i-rate").value = rate ?? 0;
   row.querySelector(".remove-item").addEventListener("click", () => { row.remove(); updateTotal(); });
   document.getElementById("items").appendChild(row);
-  updateTotal();
-});
+}
+
+// ── Wire up ─────────────────────────────────────────────────────────────────
+document.querySelectorAll(".tab").forEach((b) =>
+  b.addEventListener("click", () => setTemplate(b.dataset.tpl)));
+document.getElementById("add-item").addEventListener("click", () => { addItemRow("", 1, 0); updateTotal(); });
+document.getElementById("preset").addEventListener("change", (e) => loadPreset(e.target.value));
 document.querySelectorAll(".item-row .remove-item").forEach((b) =>
   b.addEventListener("click", () => { b.closest(".item-row").remove(); updateTotal(); }));
 document.querySelectorAll("#items input").forEach((i) => i.addEventListener("input", updateTotal));

@@ -17,13 +17,13 @@
     <span class="wordmark">Brain<span class="accent">Docs</span></span>
     <span class="family-badge">by BrainAdvisor</span>
   </div>
-  <nav><a href="#builder">Builder</a> <a href="#pricing">Pricing</a> <a href="#legal">Legal</a></nav>
+  <nav><a href="#builder">Builder</a> <a href="#pricing">Pricing</a> <a href="#feedback">Request a Template</a> <a href="#legal">Legal</a></nav>
 </header>
 
 <main>
   <section class="hero">
-    <h1>Professional documents in <em>seconds</em>.</h1>
-    <p>Invoices, quotes, and Texas landlord notices — fill a form, download a clean PDF. No designer, no lawyer, no hassle.</p>
+    <h1>Professional documents in <em>30 seconds</em>.</h1>
+    <p>No account. No app install. No signup walls. Fill a form, download a clean PDF — built for mobile auto mechanics, independent plumbers, and Texas landlords.</p>
   </section>
 
   <section id="builder" class="card">
@@ -56,6 +56,15 @@
       </div>
 
       <label>Notes <textarea id="f_notes" rows="2" placeholder="Optional notes…"></textarea></label>
+
+      <label>Industry preset
+        <select id="preset">
+          <option value="generic">Generic / other</option>
+          <option value="mechanic">🔧 Mobile auto mechanic</option>
+          <option value="plumber">🚿 Independent plumber</option>
+        </select>
+      </label>
+      <p class="hint">Presets pre-load common parts and labor rates for your trade — edit or delete any line.</p>
 
       <div class="items" id="items">
         <h3>Line items</h3>
@@ -102,6 +111,12 @@
       </div>
     </div>
     <p class="fineprint center">Payments secured by Stripe. Cancel anytime. Not happy? Full refund within 14 days.</p>
+  </section>
+
+  <section id="feedback" class="card">
+    <h2>Built for you — request a template</h2>
+    <p>Big software companies are slow. I'm not. If you want a template for your exact trade or city — tree services, mobile detailing, roofers, food trucks — email me and I'll push it live, usually the same day.</p>
+    <p class="fineprint">Email: <a href="mailto:1034jcd@gmail.com?subject=BrainDocs%20template%20request">1034jcd@gmail.com</a> · BrainDocs is run directly by its founder.</p>
   </section>
 
   <section id="legal" class="card legal">
