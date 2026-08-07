@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 import Stripe from "stripe";
 import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
@@ -28,6 +29,7 @@ function getStripe() {
 }
 const isConfigured = Boolean(secretKey && (priceSingle || pricePro || priceLifetime || priceBusiness));
 
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json({ verify: (req, _res, buf) => { req.rawBody = buf; } }));
 app.use(express.static(path.join(here, "public")));
 

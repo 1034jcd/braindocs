@@ -36,6 +36,40 @@ jobs:
             exit 1
           fi
 
+  ai-marketing:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.schedule == '45 8 * * *' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          mkdir -p /tmp/mkt-deps
+          npm install --prefix /tmp/mkt-deps nodemailer --no-save --no-audit --no-fund
+          npm install --prefix /tmp/mkt-deps helmet --no-save --no-audit --no-fund --silent || true
+      - name: Social listening + daily hooks
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        run: NODE_PATH=/tmp/mkt-deps/node_modules node scripts/social-listen.cjs
+
+  security-scan:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.schedule == '0 9 * * 1' || github.event_name == 'workflow_dispatch' }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install deps
+        run: |
+          mkdir -p /tmp/sec-deps
+          npm install --prefix /tmp/sec-deps nodemailer --no-save --no-audit --no-fund
+      - name: Scan for leaked secrets
+        env:
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+        run: NODE_PATH=/tmp/sec-deps/node_modules node scripts/security-scan.cjs || true
+
   revenue-report:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '45 8 * * *' || github.event_name == 'workflow_dispatch' }}
