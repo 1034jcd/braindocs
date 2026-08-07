@@ -63,7 +63,10 @@
   function unlock(type) {
     if (type === "pro") {
       localStorage.setItem("braindocs_unlock", JSON.stringify({ type: "pro" }));
-      unlockEl.textContent = "⚡ Pro is active — unlimited watermark-free downloads.";
+      unlockEl.textContent = "⚡ Pro is active — unlimited watermark-free downloads and AI tools.";
+    } else if (type === "lifetime") {
+      localStorage.setItem("braindocs_unlock", JSON.stringify({ type: "lifetime" }));
+      unlockEl.textContent = "👑 Lifetime Pass is active — unlimited PDFs and AI tools, forever.";
     } else {
       localStorage.setItem("braindocs_unlock", JSON.stringify({ type: "single", downloadsLeft: 1 }));
       unlockEl.textContent = "🧾 Single-document credit is active — 1 watermark-free download.";
@@ -88,15 +91,15 @@
     // No session id: if already unlocked locally, just show success; otherwise pending state.
     var existing = null;
     try { existing = JSON.parse(localStorage.getItem("braindocs_unlock") || "null"); } catch (e) {}
-    if (existing) { showSuccess(existing.type === "pro" ? "Welcome to BrainDocs Pro" : "Payment Confirmed"); }
+    if (existing) { showSuccess(existing.type === "pro" ? "Welcome to BrainDocs Pro" : existing.type === "lifetime" ? "Welcome to the Lifetime Pass" : "Payment Confirmed"); }
     else { showPending(); }
   } else {
     fetch("/api/verify?session_id=" + encodeURIComponent(sessionId))
       .then(function (r) { return r.json(); })
       .then(function (data) {
         if (data.paid) {
-          unlock(data.mode === "pro" ? "pro" : "single");
-          showSuccess(data.mode === "pro" ? "Welcome to BrainDocs Pro" : "Payment Confirmed");
+          unlock(data.mode === "lifetime" ? "lifetime" : data.mode === "pro" ? "pro" : "single");
+          showSuccess(data.mode === "lifetime" ? "Welcome to the Lifetime Pass" : data.mode === "pro" ? "Welcome to BrainDocs Pro" : "Payment Confirmed");
         } else {
           showPending();
           // Retry a few times in case the webhook/verification is slow.
@@ -109,8 +112,8 @@
               .then(function (d) {
                 if (d.paid) {
                   clearInterval(timer);
-                  unlock(d.mode === "pro" ? "pro" : "single");
-                  showSuccess(d.mode === "pro" ? "Welcome to BrainDocs Pro" : "Payment Confirmed");
+                  unlock(d.mode === "lifetime" ? "lifetime" : d.mode === "pro" ? "pro" : "single");
+                  showSuccess(d.mode === "lifetime" ? "Welcome to the Lifetime Pass" : d.mode === "pro" ? "Welcome to BrainDocs Pro" : "Payment Confirmed");
                 }
               }).catch(function () {});
           }, 7000);

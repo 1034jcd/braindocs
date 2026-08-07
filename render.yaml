@@ -16,6 +16,10 @@ services:
         value: price_1U1eURPOPXDmUKH9EsW8eGs2
       - key: STRIPE_PRICE_PRO
         value: price_1U1eUSPOPXDmUKH9Tr6zyZCn
+      - key: STRIPE_PRICE_LIFETIME
+        value: price_1U1ehSPOPXDmUKH9ymSSosf5
+      - key: GEMINI_API_KEY
+        sync: false
       - key: GMAIL_USER
         value: 1034jcd@gmail.com
       - key: OWNER_EMAIL

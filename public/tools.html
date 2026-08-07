@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainTools — AI for Your Business | BrainAdvisor</title>
+<meta name="description" content="BrainTools by BrainAdvisor — AI review responder and photo-based job estimate builder. Reply to customer reviews in seconds and turn photos into itemized quotes. $19 lifetime, or $9/mo Pro.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<link rel="stylesheet" href="/style.css">
+<style>
+  .tool-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 18px; }
+  .ttab { background: var(--bg2); color: var(--muted); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; cursor: pointer; font-weight: 700; }
+  .ttab.active { background: var(--cyan); color: var(--bg); border-color: var(--cyan); }
+  .tool-panel { display: none; }
+  .tool-panel.active { display: block; }
+  .variant { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin: 10px 0; }
+  .variant h4 { margin: 0 0 6px; color: var(--gold); font-size: 0.85rem; }
+  .copy-btn { margin-top: 8px; }
+  .busy { opacity: 0.6; pointer-events: none; }
+  .gated { border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.03); border-radius: 12px; padding: 14px 16px; margin: 14px 0; }
+  #img-preview { max-width: 100%; max-height: 260px; border-radius: 10px; border: 1px solid var(--line); margin-top: 10px; display: none; }
+  .est-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  .est-table th, .est-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+  .est-total { text-align: right; font-weight: 800; color: var(--green); font-size: 1.1rem; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a class="family-mark" href="https://brainadvisor.onrender.com" target="_blank" rel="noopener" title="BrainAdvisor">
+      <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" class="ba-logo">
+    </a>
+    <span class="wordmark">Brain<span class="accent">Tools</span></span>
+    <span class="family-badge">by BrainAdvisor</span>
+  </div>
+  <nav><a href="/">🧾 BrainDocs Builder</a> <a href="#pricing">Pricing</a> <a href="#legal">Legal</a></nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>AI that <em>works for your business</em>.</h1>
+    <p>Reply to customer reviews in seconds, and turn a photo into an itemized quote. No accounts, no signups — real AI answers, free to try.</p>
+  </section>
+
+  <section class="card">
+    <div class="tool-tabs">
+      <button class="ttab active" data-tool="review">💬 Review Responder</button>
+      <button class="ttab" data-tool="estimate">📷 Scope Estimator</button>
+    </div>
+
+    <!-- Review Responder -->
+    <div class="tool-panel active" id="panel-review">
+      <h2>Review Responder</h2>
+      <p class="hint">Paste a customer review. Get 3 ready-to-post replies: warm, professional, and SEO-friendly.</p>
+      <label>Paste the review
+        <textarea id="review" rows="4" placeholder="e.g., Great tacos but the service was slow on Friday night…"></textarea>
+      </label>
+      <label>Business type
+        <select id="biz-type">
+          <option value="restaurant">Restaurant / food</option>
+          <option value="salon">Salon / barber / spa</option>
+          <option value="auto">Auto shop / mechanic</option>
+          <option value="plumbing">Plumbing / HVAC</option>
+          <option value="cleaning">Cleaning / housekeeping</option>
+          <option value="contractor">Contractor / trades</option>
+          <option value="retail">Retail / shop</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <button id="gen-review" class="primary">Generate replies</button>
+      <div id="review-out"></div>
+      <div id="review-gate" class="gated" hidden>
+        <p><strong>Free limit reached.</strong> You've used today's free replies. Get the <strong>Lifetime Pass — $19 one-time</strong> (first 50 buyers) or <strong>Pro — $9/mo</strong> for unlimited AI tools and PDFs.</p>
+        <button id="buy-lifetime" class="primary">Buy Lifetime Pass — $19</button>
+        <button id="buy-pro" class="ghost">Go Pro — $9/mo</button>
+      </div>
+    </div>
+
+    <!-- Scope Estimator -->
+    <div class="tool-panel" id="panel-estimate">
+      <h2>Scope Estimator</h2>
+      <p class="hint">Upload a photo of the job. AI drafts an itemized quote you can push straight into the BrainDocs builder.</p>
+      <label>Job type
+        <select id="job-type">
+          <option value="drywall">Drywall / repair</option>
+          <option value="landscaping">Landscaping / yard</option>
+          <option value="painting">Painting</option>
+          <option value="fencing">Fencing</option>
+          <option value="roofing">Roofing</option>
+          <option value="cleaning">Cleanup / hauling</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label>Photo of the job
+        <input type="file" id="job-photo" accept="image/*" capture="environment">
+      </label>
+      <img id="img-preview" alt="Job photo preview">
+      <button id="gen-estimate" class="primary">Create estimate</button>
+      <div id="estimate-out"></div>
+      <div id="estimate-gate" class="gated" hidden>
+        <p><strong>Free limit reached.</strong> You've used today's free estimate. Get the <strong>Lifetime Pass — $19 one-time</strong> (first 50 buyers) or <strong>Pro — $9/mo</strong> for unlimited AI tools and PDFs.</p>
+        <button id="buy-lifetime-2" class="primary">Buy Lifetime Pass — $19</button>
+        <button id="buy-pro-2" class="ghost">Go Pro — $9/mo</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="pricing" class="card">
+    <h2>Pricing</h2>
+    <div class="plans">
+      <div class="plan">
+        <h3>Free</h3>
+        <p class="price">$0</p>
+        <ul><li>3 AI replies per day</li><li>1 photo estimate per day</li><li>Watermarked PDFs</li></ul>
+      </div>
+      <div class="plan hot">
+        <h3>Lifetime Pass</h3>
+        <p class="price">$19<span> once</span></p>
+        <ul><li>Unlimited AI tools forever</li><li>Unlimited watermark-free PDFs</li><li>First 50 buyers only</li><li>14-day refund</li></ul>
+        <button id="buy-lifetime-3" class="primary">Buy — $19</button>
+      </div>
+      <div class="plan">
+        <h3>Pro</h3>
+        <p class="price">$9<span>/mo</span></p>
+        <ul><li>Unlimited AI tools</li><li>Unlimited watermark-free PDFs</li><li>Cancel anytime · 14-day refund</li></ul>
+        <button id="buy-pro-3" class="primary">Go Pro — $9/mo</button>
+      </div>
+    </div>
+    <p class="fineprint center">Payments secured by Stripe (Apple Pay, Google Pay, Link supported). Cancel anytime. 14-day full refund.</p>
+  </section>
+
+  <section id="legal" class="card legal">
+    <h2>Legal &amp; Disclaimers</h2>
+    <p><strong>AI-generated content.</strong> Replies and estimates are drafted by AI for convenience. You are responsible for reviewing and verifying before posting or sending. Estimates are not guaranteed or binding.</p>
+    <p><strong>Not legal advice.</strong> Documents built here are general-purpose and informational. Consult a licensed professional for important matters.</p>
+    <p><strong>Privacy.</strong> Reviews and photos are processed only to generate your result and are not stored. We never sell your data.</p>
+    <p><strong>Contact.</strong> 1034jcd@gmail.com — BrainTools is part of the BrainAdvisor family (<a href="https://brainadvisor.onrender.com" target="_blank" rel="noopener">brainadvisor.onrender.com</a>).</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" class="ba-logo small">
+    <span>BrainTools is part of the <strong>BrainAdvisor</strong> family of apps</span>
+  </div>
+  <p>BrainTools — AI tools for small business · Verify AI output before use.</p>
+</footer>
+
+<div id="toast" hidden></div>
+<script>
+(function () {
+  var FREE = { reviewsPerDay: 3, estimatesPerDay: 1 };
+  function getUsage() {
+    var today = new Date().toISOString().split("T")[0];
+    try {
+      var u = JSON.parse(localStorage.getItem("braindocs_tools_usage") || "null");
+      if (u && u.date === today) return u;
+    } catch (e) {}
+    var fresh = { date: today, reviews: 0, estimates: 0 };
+    localStorage.setItem("braindocs_tools_usage", JSON.stringify(fresh));
+    return fresh;
+  }
+  function saveUsage(u) { localStorage.setItem("braindocs_tools_usage", JSON.stringify(u)); }
+  function getUnlock() { try { return JSON.parse(localStorage.getItem("braindocs_unlock") || "null"); } catch (e) { return null; } }
+  function hasToolsAccess() { var u = getUnlock(); return Boolean(u && (u.type === "pro" || u.type === "lifetime")); }
+  function toast(msg) { var t = document.getElementById("toast"); t.textContent = msg; t.hidden = false; setTimeout(function () { t.hidden = true; }, 2600); }
+  function copy(text) {
+    var done = function () { toast("Copied to clipboard!"); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done).catch(done);
+    else { prompt("Copy this:", text); done(); }
+  }
+
+  // Tabs
+  document.querySelectorAll(".ttab").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll(".ttab").forEach(function (x) { x.classList.toggle("active", x === b); });
+      document.querySelectorAll(".tool-panel").forEach(function (p) { p.classList.toggle("active", p.id === "panel-" + b.dataset.tool); });
+    });
+  });
+
+  // Review responder
+  document.getElementById("gen-review").addEventListener("click", async function () {
+    var review = document.getElementById("review").value.trim();
+    var out = document.getElementById("review-out");
+    out.innerHTML = "";
+    if (review.length < 10) { out.innerHTML = '<p class="status err">Paste a review first (at least 10 characters).</p>'; return; }
+    if (!hasToolsAccess()) {
+      var usage = getUsage();
+      if (usage.reviews >= FREE.reviewsPerDay) { document.getElementById("review-gate").hidden = false; return; }
+      usage.reviews += 1; saveUsage(usage);
+    }
+    var btn = document.getElementById("gen-review");
+    btn.classList.add("busy"); btn.disabled = true;
+    out.innerHTML = '<p class="status">Thinking…</p>';
+    try {
+      var res = await fetch("/api/ai/review", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ review: review, businessType: document.getElementById("biz-type").value }),
+      });
+      var data = await res.json();
+      if (!data.ok) throw new Error(data.message || "Failed");
+      out.innerHTML = "";
+      data.variants.forEach(function (v, i) {
+        var d = document.createElement("div");
+        d.className = "variant";
+        d.innerHTML = "<h4>Variant " + (i + 1) + "</h4><p>" + v.replace(/</g, "&lt;") + "</p>";
+        var b = document.createElement("button");
+        b.className = "copy-btn ghost"; b.textContent = "📋 Copy";
+        b.addEventListener("click", function () { copy(v); });
+        d.appendChild(b);
+        out.appendChild(d);
+      });
+      toast("3 replies ready!");
+    } catch (e) {
+      out.innerHTML = '<p class="status err">' + (e.message || "AI unavailable — try again in a minute.") + "</p>";
+    } finally {
+      btn.classList.remove("busy"); btn.disabled = false;
+    }
+  });
+
+  // Photo preview
+  var fileInput = document.getElementById("job-photo");
+  fileInput.addEventListener("change", function () {
+    var f = fileInput.files[0];
+    if (!f) return;
+    var img = document.getElementById("img-preview");
+    img.src = URL.createObjectURL(f);
+    img.style.display = "block";
+  });
+
+  // Scope estimator
+  document.getElementById("gen-estimate").addEventListener("click", async function () {
+    var out = document.getElementById("estimate-out");
+    out.innerHTML = "";
+    var f = fileInput.files[0];
+    if (!f) { out.innerHTML = '<p class="status err">Upload a photo of the job first.</p>'; return; }
+    if (!hasToolsAccess()) {
+      var usage = getUsage();
+      if (usage.estimates >= FREE.estimatesPerDay) { document.getElementById("estimate-gate").hidden = false; return; }
+      usage.estimates += 1; saveUsage(usage);
+    }
+    var btn = document.getElementById("gen-estimate");
+    btn.classList.add("busy"); btn.disabled = true;
+    out.innerHTML = '<p class="status">Analyzing photo…</p>';
+    try {
+      var reader = new FileReader();
+      var dataUrl = await new Promise(function (resolve, reject) {
+        reader.onload = function () { resolve(reader.result); };
+        reader.onerror = reject;
+        reader.readAsDataURL(f);
+      });
+      var mime = (dataUrl.match(/^data:([^;,]+)/) || [])[1] || "image/jpeg";
+      var b64 = dataUrl.split(",")[1];
+      var res = await fetch("/api/ai/estimate", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: b64, mimeType: mime, jobType: document.getElementById("job-type").value }),
+      });
+      var data = await res.json();
+      if (!data.ok) throw new Error(data.message || "Failed");
+      var est = data.estimate;
+      var total = est.items.reduce(function (s, it) { return s + it.qty * it.rate; }, 0);
+      var html = "<h3>Draft estimate</h3><p class='hint'>" + est.summary.replace(/</g, "&lt;") + "</p>";
+      html += "<table class='est-table'><thead><tr><th>Description</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead><tbody>";
+      est.items.forEach(function (it) { html += "<tr><td>" + it.desc.replace(/</g, "&lt;") + "</td><td>" + it.qty + "</td><td>$" + Number(it.rate).toFixed(2) + "</td><td>$" + (it.qty * it.rate).toFixed(2) + "</td></tr>"; });
+      html += "</tbody></table><p class='est-total'>Total: $" + total.toFixed(2) + "</p>";
+      html += "<p class='fineprint'>AI draft — verify before sending to a customer.</p>";
+      html += "<button id='open-builder' class='primary'>📄 Open in BrainDocs Builder</button>";
+      out.innerHTML = html;
+      document.getElementById("open-builder").addEventListener("click", function () {
+        var today = new Date().toISOString().split("T")[0];
+        var due = new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0];
+        var state = { tpl: "quote", preset: "generic", biz: "", email: "", phone: "", client: "Client", num: "Q-0001", date: today, due: due, notes: est.summary, items: est.items };
+        var hash = btoa(unescape(encodeURIComponent(JSON.stringify(state))));
+        window.location.href = "/#doc=" + hash;
+      });
+      toast("Estimate ready!");
+    } catch (e) {
+      out.innerHTML = '<p class="status err">' + (e.message || "Could not read the photo — try again.") + "</p>";
+    } finally {
+      btn.classList.remove("busy"); btn.disabled = false;
+    }
+  });
+
+  // Checkout wiring (all lifetime/pro buttons)
+  function checkout(mode) {
+    fetch("/api/stripe/checkout", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ mode: mode }),
+    }).then(function (r) { return r.json(); }).then(function (d) {
+      if (d.url) window.location.href = d.url;
+      else toast(d.message || "Checkout failed — try again.");
+    }).catch(function () { toast("Checkout failed — try again."); });
+  }
+  ["buy-lifetime", "buy-lifetime-2", "buy-lifetime-3"].forEach(function (id) {
+    document.getElementById(id).addEventListener("click", function () { checkout("lifetime"); });
+  });
+  ["buy-pro", "buy-pro-2", "buy-pro-3"].forEach(function (id) {
+    document.getElementById(id).addEventListener("click", function () { checkout("pro"); });
+  });
+})();
+</script>
+</body>
+</html>

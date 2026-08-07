@@ -191,7 +191,7 @@ async function generatePDF() {
       page.drawText("Generated with BrainDocs by BrainAdvisor — brainadvisor.onrender.com", { x: 50, y: 58, size: 8, font, color: COLORS.gray });
     }
 
-    watermark(page, font, unlock && (unlock.type === "pro" || unlock.downloadsLeft > 0), unlock?.type);
+    watermark(page, font, unlock && (unlock.type === "pro" || unlock.type === "lifetime" || unlock.downloadsLeft > 0), unlock?.type);
 
     const bytes = await doc.save();
     const blob = new Blob([bytes], { type: "application/pdf" });
@@ -224,7 +224,7 @@ function getUnlock() {
 }
 function isUnlocked() {
   const u = getUnlock();
-  return Boolean(u && (u.type === "pro" || u.downloadsLeft > 0));
+  return Boolean(u && (u.type === "pro" || u.type === "lifetime" || u.downloadsLeft > 0));
 }
 function refreshUnlockUI() {
   const u = getUnlock();
@@ -234,7 +234,7 @@ function refreshUnlockUI() {
   if (u) {
     badge.id = "unlock-badge";
     badge.style.cssText = "position:fixed;bottom:14px;right:14px;z-index:99;background:#04202e;color:#00e5ff;border:1px solid #00e5ff;border-radius:999px;padding:8px 14px;font-size:0.8rem;font-weight:700;";
-    badge.textContent = u.type === "pro" ? "⚡ Pro — unlimited PDFs" : "🧾 " + u.downloadsLeft + " download(s) left";
+    badge.textContent = u.type === "pro" ? "⚡ Pro — unlimited PDFs" : u.type === "lifetime" ? "👑 Lifetime Pass — unlimited" : "🧾 " + u.downloadsLeft + " download(s) left";
     document.body.appendChild(badge);
   }
 }
