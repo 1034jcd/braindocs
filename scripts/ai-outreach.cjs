@@ -9,6 +9,8 @@ const https = require('https');
 const SK = process.env.GEMINI_API_KEY || '';
 const MODEL = process.env.AI_MODEL || 'gemini-3.5-flash';
 const ROOT = path.join(__dirname, '..');
+const APP_NAME = process.env.APP_NAME || 'BrainDocs';
+const APP_LINK = process.env.APP_LINK || 'https://braindocs-7qqx.onrender.com';
 const CSV = process.argv.includes('--csv') ? process.argv[process.argv.indexOf('--csv') + 1] : path.join(ROOT, 'prospects.csv');
 const SEND = process.argv.includes('--send');
 const DAILY_CAP = Number(process.env.OUTREACH_DAILY_CAP || '20');
@@ -44,7 +46,7 @@ async function main() {
   const prospects = parseCsv(CSV);
   console.log(`Loaded ${prospects.length} prospects.`);
   if (!prospects.length) { console.log('No real prospects (all rows look like examples). Copy prospects.example.csv -> prospects.csv and add real leads.'); process.exit(0); }
-  const system = 'You write short, natural, personalized cold emails for a free-to-try web tool called BrainDocs (a 30-second document builder for small trades: estimates, invoices, quotes with pre-filled niche line items). Rules: first line must reference the prospect\'s business/niche/city specifically; be helpful, not salesy; mention it is free to try and $3.99 only if they want the watermark off; keep under 110 words; include the link https://braindocs-7qqx.onrender.com/l/{slug} where slug is the best-matching landing page for their niche (e.g. estimate-mobile-mechanic-san-antonio-tx, quote-plumber-houston-tx, invoice-lawn-care-austin-tx, estimate-detailer-dallas-tx, quote-roofer-el-paso-tx, estimate-painter-san-antonio-tx, invoice-house-cleaner-san-antonio-tx, estimate-handyman-corpus-christi-tx, estimate-electrician-dallas-tx). No fake claims, no guarantees of income.';
+  const system = `You write short, natural, personalized cold emails for a free-to-try web tool called ${APP_NAME}. Rules: first line must reference the prospect's business/niche/city specifically; be helpful, not salesy; mention it is free to try with a low one-time fee only if they want the watermark off; keep under 110 words; include the link ${APP_LINK}/l/{slug} where slug is the best-matching landing page for their niche (e.g. estimate-mobile-mechanic-san-antonio-tx, quote-plumber-houston-tx, invoice-lawn-care-austin-tx, estimate-detailer-dallas-tx, quote-roofer-el-paso-tx, estimate-painter-san-antonio-tx, invoice-house-cleaner-san-antonio-tx, estimate-handyman-corpus-christi-tx, estimate-electrician-dallas-tx). No fake claims, no guarantees of income.`;
   const lines = ['# AI outreach — ' + new Date().toISOString().split('T')[0], ''];
   const sent = [];
   for (const p of prospects) {
