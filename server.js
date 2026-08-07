@@ -390,6 +390,12 @@ app.get("/robots.txt", (_req, res) => {
   res.type("text/plain").send("User-agent: *\nAllow: /\nSitemap: https://braindocs-7qqx.onrender.com/sitemap.xml\n");
 });
 
+
+// IndexNow key file (host verification for search engine indexing)
+app.get("/bd7f3a9c2e1d4b5a8f6c0e3d9a2b1c4d.txt", (_req, res) => {
+  res.type("text/plain").send("bd7f3a9c2e1d4b5a8f6c0e3d9a2b1c4d");
+});
+
 app.get("/paid", (_req, res) => {
   res.sendFile(path.join(here, "public", "paid.html"));
 });
