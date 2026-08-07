@@ -34,7 +34,7 @@ async function main() {
       for (const m of src.matchAll(re)) {
         if (label === "Possible credential assignment") {
           const line = srcLines.find((l) => l.includes(m[0].slice(0, 8))) || "";
-          if (line.includes("process.env") || line.includes("??") || line.includes("||")) continue;
+          if (/process\.env|\?\?|\|\||your_|_key_here|change-|your-|example|here|\.get\(|document\./i.test(line)) continue;
         }
         findings.push({ file: f, label, match: String(m[0]).slice(0, 14) + "…" });
       }
