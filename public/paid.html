@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Confirmed — BrainDocs | BrainAdvisor</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+<link rel="stylesheet" href="/style.css">
+<style>
+  .success-wrap { max-width: 560px; margin: 0 auto; padding: 48px 16px; text-align: center; }
+  .check { width: 84px; height: 84px; margin: 0 auto 18px; border-radius: 50%; border: 2px solid var(--green); background: rgba(0,212,168,0.08); display: flex; align-items: center; justify-content: center; font-size: 2.6rem; color: var(--green); }
+  .success-wrap h1 { font-size: 2rem; margin: 0 0 10px; color: var(--gold); }
+  .success-wrap p { color: var(--muted); }
+  .big { font-size: 1.05rem; }
+  .unlock-note { background: rgba(0,229,255,0.07); border: 1px solid rgba(0,229,255,0.25); border-radius: 12px; padding: 14px 16px; margin: 22px 0; color: var(--cyan); font-weight: 600; }
+  .pending { color: var(--gold); font-weight: 600; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a class="family-mark" href="https://brainadvisor.onrender.com" target="_blank" rel="noopener" title="BrainAdvisor">
+      <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" class="ba-logo">
+    </a>
+    <span class="wordmark">Brain<span class="accent">Docs</span></span>
+    <span class="family-badge">by BrainAdvisor</span>
+  </div>
+</header>
+
+<main>
+  <div class="success-wrap card">
+    <div class="check">✓</div>
+    <h1 id="title">Checking your payment…</h1>
+    <p class="big" id="subtitle">One moment while we confirm your order with Stripe.</p>
+    <div class="unlock-note" id="unlock" hidden>Your document unlock is now active.</div>
+    <p id="status" class="pending"></p>
+    <div id="actions" hidden>
+      <a href="/" class="primary" style="display:inline-block; text-decoration:none; padding:12px 26px; border-radius:10px; font-weight:700;">⬅ Back to the Builder</a>
+    </div>
+    <p class="fineprint center" style="margin-top:18px;">Payments processed securely by Stripe. Refunds: contact us within 14 days for a full refund.<br>BrainDocs is part of the BrainAdvisor family (<a href="https://brainadvisor.onrender.com" target="_blank" rel="noopener">brainadvisor.onrender.com</a>).</p>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" class="ba-logo small">
+    <span>BrainDocs is part of the <strong>BrainAdvisor</strong> family of apps</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var sessionId = params.get("session_id") || "";
+  var mode = params.get("mode") || "single";
+  var title = document.getElementById("title");
+  var subtitle = document.getElementById("subtitle");
+  var statusEl = document.getElementById("status");
+  var unlockEl = document.getElementById("unlock");
+  var actions = document.getElementById("actions");
+
+  function unlock(type) {
+    if (type === "pro") {
+      localStorage.setItem("braindocs_unlock", JSON.stringify({ type: "pro" }));
+      unlockEl.textContent = "⚡ Pro is active — unlimited watermark-free downloads.";
+    } else {
+      localStorage.setItem("braindocs_unlock", JSON.stringify({ type: "single", downloadsLeft: 1 }));
+      unlockEl.textContent = "🧾 Single-document credit is active — 1 watermark-free download.";
+    }
+    unlockEl.hidden = false;
+  }
+
+  function showSuccess(label) {
+    title.textContent = label;
+    subtitle.textContent = "Your document credit is ready. Head back to the builder and download your watermark-free PDF.";
+    statusEl.textContent = "";
+    actions.hidden = false;
+  }
+
+  function showPending() {
+    title.textContent = "Payment received — confirming…";
+    subtitle.textContent = "Stripe is confirming your payment. If this takes more than a minute, check your email for the receipt.";
+    statusEl.textContent = "⏳ We'll auto-unlock as soon as verification completes.";
+  }
+
+  if (!sessionId) {
+    // No session id: if already unlocked locally, just show success; otherwise pending state.
+    var existing = null;
+    try { existing = JSON.parse(localStorage.getItem("braindocs_unlock") || "null"); } catch (e) {}
+    if (existing) { showSuccess(existing.type === "pro" ? "Welcome to BrainDocs Pro" : "Payment Confirmed"); }
+    else { showPending(); }
+  } else {
+    fetch("/api/verify?session_id=" + encodeURIComponent(sessionId))
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.paid) {
+          unlock(data.mode === "pro" ? "pro" : "single");
+          showSuccess(data.mode === "pro" ? "Welcome to BrainDocs Pro" : "Payment Confirmed");
+        } else {
+          showPending();
+          // Retry a few times in case the webhook/verification is slow.
+          var tries = 0;
+          var timer = setInterval(function () {
+            tries++;
+            if (tries > 8) { clearInterval(timer); return; }
+            fetch("/api/verify?session_id=" + encodeURIComponent(sessionId))
+              .then(function (r) { return r.json(); })
+              .then(function (d) {
+                if (d.paid) {
+                  clearInterval(timer);
+                  unlock(d.mode === "pro" ? "pro" : "single");
+                  showSuccess(d.mode === "pro" ? "Welcome to BrainDocs Pro" : "Payment Confirmed");
+                }
+              }).catch(function () {});
+          }, 7000);
+        }
+      })
+      .catch(function () { showPending(); });
+  }
+})();
+</script>
+</body>
+</html>

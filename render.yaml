@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: braindocs
+    runtime: node
+    plan: free
+    buildCommand: npm install --production
+    startCommand: node server.js
+    autoDeploy: true
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PUBLIC_BASE_URL
+        value: https://braindocs.onrender.com
+      - key: STRIPE_PRICE_SINGLE
+        value: price_1U1eURPOPXDmUKH9EsW8eGs2
+      - key: STRIPE_PRICE_PRO
+        value: price_1U1eUSPOPXDmUKH9Tr6zyZCn
+      - key: GMAIL_USER
+        value: 1034jcd@gmail.com
+      - key: OWNER_EMAIL
+        value: 1034jcd@gmail.com

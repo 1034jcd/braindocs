@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#020409"/>
+    </linearGradient>
+    <linearGradient id="brain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#0091ea"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <circle cx="256" cy="240" r="180" fill="none" stroke="url(#brain)" stroke-width="12" filter="url(#glow)"/>
+  <path d="M256 100 C180 100 120 150 120 220 C120 270 150 310 190 330 L170 400 L240 350 C245 352 250 352 256 352 C262 352 267 352 272 350 L342 400 L322 330 C362 310 392 270 392 220 C392 150 332 100 256 100Z" fill="none" stroke="url(#brain)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M210 220 L256 170 L302 220" fill="none" stroke="#00e5ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M256 170 L256 300" stroke="#00e5ff" stroke-width="6" stroke-linecap="round"/>
+  <path d="M220 260 L256 300 L292 260" fill="none" stroke="#00e5ff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

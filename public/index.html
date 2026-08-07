@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainDocs — Professional Documents in Seconds | BrainAdvisor</title>
+<meta name="description" content="BrainDocs by BrainAdvisor — generate clean, professional invoices, quotes, and Texas notices instantly. Free previews, $2.99 watermark-free downloads, $9/mo unlimited.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧾</text></svg>">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a class="family-mark" href="https://brainadvisor.onrender.com" target="_blank" rel="noopener" title="BrainAdvisor">
+      <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" class="ba-logo">
+    </a>
+    <span class="wordmark">Brain<span class="accent">Docs</span></span>
+    <span class="family-badge">by BrainAdvisor</span>
+  </div>
+  <nav><a href="#builder">Builder</a> <a href="#pricing">Pricing</a> <a href="#legal">Legal</a></nav>
+</header>
+
+<main>
+  <section class="hero">
+    <h1>Professional documents in <em>seconds</em>.</h1>
+    <p>Invoices, quotes, and Texas landlord notices — fill a form, download a clean PDF. No designer, no lawyer, no hassle.</p>
+  </section>
+
+  <section id="builder" class="card">
+    <h2>Document Builder</h2>
+    <div class="tabs" id="tabs">
+      <button data-tpl="invoice" class="tab active">🧾 Invoice</button>
+      <button data-tpl="quote" class="tab">📋 Quote / Estimate</button>
+      <button data-tpl="notice" class="tab">🏠 Texas 3-Day Notice</button>
+    </div>
+
+    <form id="doc-form" autocomplete="off">
+      <div class="grid">
+        <label>Your business / name <input id="f_biz" value="Your Business Name" required></label>
+        <label>Your email <input id="f_email" type="email" placeholder="you@business.com"></label>
+        <label>Your phone <input id="f_phone" placeholder="(210) 555-0123"></label>
+      </div>
+
+      <div class="grid" id="party-row">
+        <label id="lbl_client">Client / company <input id="f_client" required></label>
+        <label id="lbl_num">Document # <input id="f_num" value="DOC-0001"></label>
+        <label id="lbl_date">Date <input id="f_date" type="date"></label>
+        <label id="lbl_due">Due / valid until <input id="f_due" type="date"></label>
+      </div>
+
+      <div class="notice-only" id="notice-fields">
+        <label>Tenant name <input id="f_tenant" placeholder="Tenant full name"></label>
+        <label>Property address <input id="f_addr" placeholder="123 Main St, San Antonio, TX"></label>
+        <label>Rent amount due ($) <input id="f_rent" type="number" min="0" step="0.01" placeholder="850.00"></label>
+        <label>Rent due date <input id="f_rentdue" type="date"></label>
+      </div>
+
+      <label>Notes <textarea id="f_notes" rows="2" placeholder="Optional notes…"></textarea></label>
+
+      <div class="items" id="items">
+        <h3>Line items</h3>
+        <div class="item-row">
+          <input class="i-desc" placeholder="Description" value="Labor / service">
+          <input class="i-qty" type="number" min="0" value="1">
+          <input class="i-rate" type="number" min="0" step="0.01" value="100.00">
+          <button type="button" class="remove-item">✕</button>
+        </div>
+      </div>
+      <button type="button" id="add-item" class="ghost">+ Add line item</button>
+
+      <div class="preview">
+        <strong>Total: $<span id="total">100.00</span></strong>
+        <span class="hint">PDF will match your entries exactly.</span>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <button type="submit" id="gen" class="primary">Generate PDF</button>
+      <p class="fineprint">Free downloads include a small preview watermark. <a href="#pricing">Remove it for $2.99</a> or go Pro.</p>
+    </form>
+  </section>
+
+  <section id="pricing" class="card">
+    <h2>Pricing</h2>
+    <div class="plans">
+      <div class="plan">
+        <h3>Free</h3>
+        <p class="price">$0</p>
+        <ul><li>All 3 templates</li><li>Watermarked PDF</li><li>No account needed</li></ul>
+      </div>
+      <div class="plan hot">
+        <h3>Single Document</h3>
+        <p class="price">$2.99</p>
+        <ul><li>One watermark-free PDF</li><li>All templates</li><li>Instant download</li></ul>
+        <button id="buy-single" class="primary">Buy — $2.99</button>
+      </div>
+      <div class="plan">
+        <h3>Pro</h3>
+        <p class="price">$9<span>/mo</span></p>
+        <ul><li>Unlimited watermark-free PDFs</li><li>Cancel anytime</li><li>14-day refund</li></ul>
+        <button id="buy-pro" class="primary">Go Pro — $9/mo</button>
+      </div>
+    </div>
+    <p class="fineprint center">Payments secured by Stripe. Cancel anytime. Not happy? Full refund within 14 days.</p>
+  </section>
+
+  <section id="legal" class="card legal">
+    <h2>Legal &amp; Disclaimers</h2>
+    <p><strong>Not legal advice.</strong> BrainDocs templates are general-purpose documents for informational use. They do not create an attorney-client relationship and may not satisfy every court, county, or local requirement. For important matters, consult a licensed attorney.</p>
+    <p><strong>Not affiliated with any court or government agency.</strong> Landlord-tenant notices (including the Texas 3-Day Notice) may have specific requirements depending on your lease, county, and situation.</p>
+    <p><strong>Refunds.</strong> If you are unhappy with a purchase, contact us within 14 days for a full refund.</p>
+    <p><strong>Privacy.</strong> We only use your email to deliver receipts. Payments are processed by Stripe; we never see your card details and never sell your data.</p>
+    <p><strong>Contact.</strong> 1034jcd@gmail.com — BrainDocs is a product of the BrainAdvisor family (<a href="https://brainadvisor.onrender.com" target="_blank" rel="noopener">brainadvisor.onrender.com</a>).</p>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-brand">
+    <img src="/brainadvisor-logo.svg" alt="BrainAdvisor" class="ba-logo small">
+    <span>BrainDocs is part of the <strong>BrainAdvisor</strong> family of apps</span>
+  </div>
+  <p>BrainDocs — professional documents in seconds · For general use. Not legal advice.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script src="/app.js"></script>
+</body>
+</html>
