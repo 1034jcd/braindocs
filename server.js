@@ -404,4 +404,15 @@ app.get(/^\/(?!api\/).*/, (_req, res) => {
   res.sendFile(path.join(here, "public", "index.html"));
 });
 
-app.listen(PORT, () => console.log(`BrainDocs live on ${baseUrl} (port ${PORT})`));
+app.listen(PORT, () => {
+  console.log(`BrainDocs live on ${baseUrl} (port ${PORT})`);
+  // Self-ping every 5 min to prevent Render free tier sleep (uses https for https URLs)
+  setInterval(() => {
+    try {
+      const http = require(baseUrl.startsWith('https') ? 'https' : 'http');
+      const req = http.get(baseUrl + '/api/healthz', (res) => { res.resume(); });
+      req.on('error', () => {});
+      req.setTimeout(5000, () => req.destroy());
+    } catch (e) {}
+  }, 5 * 60 * 1000);
+});
