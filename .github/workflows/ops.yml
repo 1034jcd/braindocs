@@ -2,7 +2,7 @@ name: BrainDocs ops (keep-alive, revenue, alerts)
 on:
   # refreshed 2026-08-07 to pick up workflow_dispatch trigger
   schedule:
-    - cron: '*/10 * * * *'   # keep-alive ping
+    - cron: '*/5 * * * *'    # keep-alive ping (every 5 min)
     - cron: '45 8 * * *'     # daily revenue email
   workflow_dispatch: {}
 
@@ -17,17 +17,21 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
         run: |
-          url="https://braindocs-7qqx.onrender.com/api/healthz"
-          code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$url" || echo DOWN)
-          if [ "$code" != "200" ]; then
-            echo "$url cold-start retry..."
-            sleep 5
+          fails=""
+          for name_url in "braindocs:https://braindocs-7qqx.onrender.com/api/healthz" "brainadvisor:https://brainadvisor.onrender.com/api/ping" "brainapi:https://brainapi-1bcu.onrender.com/api/health" "brainb2b:https://brainb2b.onrender.com/api/health" "mystic-cookie:https://mystic-cookie.onrender.com/api/health"; do
+            name="${name_url%%:*}"; url="${name_url#*:}"
             code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$url" || echo DOWN)
-          fi
-          echo "$url -> $code"
-          if [ "$code" != "200" ]; then
-            echo "DOWN: $url ($code)"
-            export DOWN_VAR="$url($code)"
+            if [ "$code" != "200" ]; then
+              echo "$name cold-start retry..."
+              sleep 5
+              code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$url" || echo DOWN)
+            fi
+            echo "$name -> $code"
+            [ "$code" != "200" ] && fails="$fails $name($code)"
+          done
+          if [ -n "$fails" ]; then
+            echo "DOWN:$fails"
+            export DOWN_VAR="Services down:$fails"
             if [ -n "$SMTP_USER" ] && [ -n "$SMTP_PASS" ] && [ -n "$REPORT_TO" ]; then
               python3 .github/scripts/send-alert.py "$REPORT_TO"
             fi
