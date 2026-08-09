@@ -1,0 +1,22 @@
+{
+  "single": {
+    "url": "https://buy.stripe.com/28E8wR9ZR0RR2Yz7e12Ry02",
+    "priceId": "price_1U1ekKPOPXDmUKH9VplAoeGZ",
+    "amount": 3.99
+  },
+  "pro": {
+    "url": "https://buy.stripe.com/bJedRb5JBfML1Uv1TH2Ry03",
+    "priceId": "price_1U1ekLPOPXDmUKH9ZFZ6V7PL",
+    "amount": 19
+  },
+  "lifetime": {
+    "url": "https://buy.stripe.com/6oU4gB3BtfMLar1aqd2Ry04",
+    "priceId": "price_1U1ekMPOPXDmUKH9zzpSdrwU",
+    "amount": 49
+  },
+  "business": {
+    "url": "https://buy.stripe.com/14A28t1tlfML56H8i52Ry05",
+    "priceId": "price_1U1epTPOPXDmUKH9ra0QoO8U",
+    "amount": 49
+  }
+}
