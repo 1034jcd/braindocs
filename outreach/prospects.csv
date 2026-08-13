@@ -1,18 +1,4 @@
-name,business,niche,city,state,source,link,contact,status,notes
+name,business,niche,city,state,source,link,contact,email,status,notes
 ,,mobile mechanic,San Antonio,TX,craigslist,https://sanantonio.craigslist.org/search/sso?query=mobile%20mechanic,,,,search "mobile mechanic" under Services
-,,plumber,San Antonio,TX,craigslist,https://sanantonio.craigslist.org/search/sso?query=plumber,,,,search "plumber" under Services
-,,roofer,San Antonio,TX,craigslist,https://sanantonio.craigslist.org/search/sso?query=roofer,,,,
-,,pressure washing,San Antonio,TX,craigslist,https://sanantonio.craigslist.org/search/sso?query=pressure%20washing,,,,
-,,lawn care,San Antonio,TX,craigslist,https://sanantonio.craigslist.org/search/sso?query=lawn%20care,,,,
-,,auto detailing,San Antonio,TX,craigslist,https://sanantonio.craigslist.org/search/sso?query=detailing,,,,
-,,handyman,Houston,TX,craigslist,https://houston.craigslist.org/search/sso?query=handyman,,,,
-,,house cleaning,Houston,TX,craigslist,https://houston.craigslist.org/search/sso?query=house%20cleaning,,,,
-,,plumber,Houston,TX,craigslist,https://houston.craigslist.org/search/sso?query=plumber,,,,
-,,electrician,Houston,TX,craigslist,https://houston.craigslist.org/search/sso?query=electrician,,,,
-,,mobile mechanic,Austin,TX,craigslist,https://austin.craigslist.org/search/sso?query=mobile%20mechanic,,,,
-,,roofer,Dallas,TX,craigslist,https://dallas.craigslist.org/search/sso?query=roofer,,,,
-,,lawn care,San Antonio,TX,facebook,https://www.facebook.com/marketplace/sanantonio/services,,,,"FB Marketplace > Services, message sellers"
-,,general contractors,San Antonio,TX,facebook-group,"search groups: San Antonio small business / Texas contractors",,,,
-,,mobile mechanics,San Antonio,TX,nextdoor,https://nextdoor.com/search/?query=mobile%20mechanic,,,,
-,,thumbtack pros,San Antonio,TX,thumbtack,https://www.thumbtack.com/tx/san-antonio/,,,,
-,,homeadvisor pros,Houston,TX,homeadvisor,https://www.homeadvisor.com/c/,,,,
+DA Mobile Mechanic,DA Mobile Mechanic,mobile mechanic,San Antonio,TX,website,https://damechanic.com,da.mechanic@outlook.com,da.mechanic@outlook.com,new,verified email from site contact page
+Mobile Master Mechanic,Mobile Master Mechanic,mobile mechanic,San Antonio,TX,website,https://mobilemastermechanic.com,support@mobilemastermechanic.com,support@mobilemastermechanic.com,new,verified email from site contact page
