@@ -109,6 +109,29 @@ app.post("/api/stripe/webhook", async (req, res) => {
     const s = event.data.object;
     const amount = (s.amount_total ?? 0) / 100;
     console.log("payment completed", s.id, amount, s.customer_email);
+    // Meta Conversions API (optional; skips silently if META_PIXEL_ID/META_CAPI_TOKEN unset)
+    const pixel = process.env.META_PIXEL_ID;
+    const capiToken = process.env.META_CAPI_TOKEN;
+    if (pixel && capiToken) {
+      const crypto = require("crypto");
+      const email = s.customer_email || (s.customer_details && s.customer_details.email);
+      const payload = {
+        data: [{
+          event_name: "Purchase",
+          event_time: Math.floor(Date.now() / 1000),
+          event_id: s.id,
+          action_source: "website",
+          event_source_url: process.env.BASE_URL || "https://braindocs-7qqx.onrender.com/",
+          user_data: email ? { email: [crypto.createHash("sha256").update(String(email).toLowerCase().trim()).digest("hex")] } : {},
+          custom_data: { currency: s.currency || "USD", value: amount },
+        }],
+      };
+      fetch(`https://graph.facebook.com/v26.0/${encodeURIComponent(pixel)}/events?access_token=${encodeURIComponent(capiToken)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }).then((r) => r.json()).then((j) => console.log("capi sent", j.receipt ? "ok" : JSON.stringify(j).slice(0, 120))).catch((e) => console.error("capi failed", e.message));
+    }
     const m = mailer();
     if (m) {
       m.sendMail({
