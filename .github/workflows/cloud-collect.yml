@@ -10,16 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          persist-credentials: true
-      - name: Collect + clean prospects (cloud, not user's wi-fi)
+      - name: Install node deps
+        run: node --version && npm init -y >/dev/null 2>&1 || true
+      - name: Collect world prospects (cloud runners, zero user data)
         run: |
+          node outreach/collect-world.cjs --max 1200 || true
           node outreach/collect-prospects.cjs || true
           node outreach/clean-prospects.cjs || true
       - name: Commit new prospects
         run: |
           git config user.name "BrainAdvisor Bot"
           git config user.email "bot@brainadvisor.family"
-          git add outreach/prospects.csv outreach/collect-run.log 2>/dev/null || git add outreach/prospects.csv
+          git add outreach/
           git diff --cached --quiet || git commit -m "cloud-collect: new prospects $(date -u +%F)"
           git push

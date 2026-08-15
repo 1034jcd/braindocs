@@ -7,7 +7,7 @@ const path = require("path");
 
 const OUT = path.join(__dirname);
 const CSV = path.join(OUT, "prospects.csv");
-const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36";
+const UA = "BrainAdvisorBot/1.0 (+contact: 1034jcd@gmail.com; https://1034jcd.github.io/brainadvisor-hub/)";
 const NICHES = { "mobile-mechanic": "mobile mechanic" };
 const CITIES = ["san-antonio", "austin", "houston"];
 

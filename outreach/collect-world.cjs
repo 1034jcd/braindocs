@@ -6,7 +6,7 @@
 const fs = require("fs");
 const path = require("path");
 const OUT = path.join(__dirname, "prospects.csv");
-const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0 Safari/537.36";
+const UA = "BrainAdvisorBot/1.0 (+contact: 1034jcd@gmail.com; https://1034jcd.github.io/brainadvisor-hub/)";
 const NICHES = ["mobile mechanic", "plumber", "roofer", "lawn care", "painter", "electrician", "handyman", "house cleaner", "pressure washing", "auto detailer", "hvac", "pest control", "locksmith", "mover", "landscaper", "tree service", "fencing contractor", "concrete contractor", "solar installer", "glass repair"];
 const CITIES = [
   ["New York","US"],["Los Angeles","US"],["Chicago","US"],["Houston","US"],["Phoenix","US"],["Philadelphia","US"],["San Antonio","US"],["San Diego","US"],["Dallas","US"],["Austin","US"],["Miami","US"],["Atlanta","US"],["Seattle","US"],["Denver","US"],["Boston","US"],["Las Vegas","US"],
@@ -29,13 +29,56 @@ const args = process.argv.slice(2);
 const cityArg = args.indexOf("--city"); const cities = cityArg >= 0 ? args.slice(cityArg + 1).filter(a => !a.startsWith("--")).map(c => [c, "XX"]) : CITIES;
 const maxArg = args.indexOf("--max"); const MAX_TOTAL = maxArg >= 0 ? Number(args[maxArg + 1]) : 2000;
 
+const robotsCache = new Map();
+async function robotsAllow(host) {
+  try {
+    const u = new URL(host.startsWith("http") ? host : "https://" + host);
+    const key = u.hostname;
+    if (robotsCache.has(key)) return robotsCache.get(key);
+    let allow = true;
+    try {
+      const r = await fetch(u.origin + "/robots.txt", { headers: { "User-Agent": UA }, redirect: "follow", signal: AbortSignal.timeout(8000) });
+      if (r.ok) {
+        const txt = (await r.text()).slice(0, 100000);
+        const lines = txt.split(/\r?\n/);
+        let inUa = false;
+        for (const raw of lines) {
+          const line = raw.trim();
+          const [k, ...v] = line.split(":");
+          const val = (v.join(":").trim() || "").toLowerCase();
+          if (/^user-agent$/i.test(k)) inUa = val.includes("*") || val.includes("brainadvisorbot");
+          else if (/^disallow$/i.test(k) && inUa && val === "/") { allow = false; break; }
+        }
+      }
+    } catch { /* no robots.txt = allowed */ }
+    robotsCache.set(key, allow);
+    return allow;
+  } catch { return true; }
+}
+const lastHit = new Map();
+async function polite(url) {
+  try {
+    const u = new URL(url);
+    const k = u.hostname;
+    const wait = Math.max(0, (lastHit.get(k) || 0) + 1400 - Date.now());
+    if (wait) await new Promise(r => setTimeout(r, wait));
+    lastHit.set(k, Date.now());
+  } catch {}
+  await new Promise(r => setTimeout(r, 500 + Math.random() * 400)); // global jitter
+}
 async function get(url, tries = 2) {
   for (let i = 0; i < tries; i++) {
+    await polite(url);
     try {
       const r = await fetch(url, { headers: { "User-Agent": UA, "Accept-Encoding": "gzip" }, redirect: "follow", signal: AbortSignal.timeout(15000) });
+      if (r.status === 429) {
+        const retry = Number(r.headers.get("retry-after") || "30") * 1000;
+        await new Promise(res => setTimeout(res, Math.min(retry, 60000)));
+        continue;
+      }
       if (r.ok) { const b = await r.arrayBuffer(); return Buffer.from(b).toString("utf8").slice(0, 2 * 1024 * 1024); }
     } catch {}
-    await new Promise(res => setTimeout(res, 1000));
+    await new Promise(res => setTimeout(res, 1500));
   }
   return "";
 }
@@ -57,15 +100,25 @@ function loadExisting() {
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+const STATE = path.join(__dirname, "world-state.json");
+function loadState() { try { return JSON.parse(fs.readFileSync(STATE, "utf8")); } catch { return { ci: 0, ni: 0 }; } }
+function saveState(ci, ni) { try { fs.writeFileSync(STATE, JSON.stringify({ ci, ni })); } catch {} }
+
 async function main() {
   const dry = process.argv.includes("--dry");
+  const resume = process.argv.includes("--resume");
   const existing = loadExisting();
   const seenEmails = new Set(existing.map(r => (r.email || "").toLowerCase()).filter(Boolean));
   const seenSites = new Set(existing.map(r => r.link).filter(l => l && l.includes("//")));
   let total = 0;
   console.log(`Cities: ${cities.length} | cap ${MAX_TOTAL} | existing rows ${existing.length}`);
-  for (const [city, country] of cities) {
-    for (const niche of NICHES) {
+  const st = resume ? loadState() : { ci: 0, ni: 0 };
+  console.log(`resume: ${resume} from city#${st.ci} niche#${st.ni}`);
+  for (let ci = 0; ci < cities.length; ci++) {
+    const [city, country] = cities[ci];
+    for (let ni = 0; ni < NICHES.length; ni++) {
+      if (ci < st.ci || (ci === st.ci && ni < st.ni)) continue;
+      const niche = NICHES[ni];
       if (total >= MAX_TOTAL) break;
       const q = encodeURIComponent(`${niche} ${city} website contact`);
       const html = await get(`https://html.duckduckgo.com/html/?q=${q}`);
@@ -75,6 +128,7 @@ async function main() {
         if (total >= MAX_TOTAL) break;
         let dom = ""; try { dom = new URL(u).hostname.replace(/^www\./, ""); } catch { continue; }
         if (seenSites.has(u) || seenSites.has("https://" + dom)) continue;
+        if (!(await robotsAllow(dom))) { console.log(`[robots] skip ${dom}`); continue; }
         let emails = [];
         for (const p of ["", "/contact", "/contact-us", "/about"]) {
           const h = await get("https://" + dom + p);
@@ -95,8 +149,10 @@ async function main() {
       }
       await sleep(400);
     }
+    saveState(ci + 1, 0);
     console.log(`[city] ${city}: done (${total} total)`);
   }
+  saveState(0, 0);
   console.log(`TOTAL NEW: ${total}`);
 }
 main().catch(e => { console.error("ERR", e.message); process.exit(1); });
