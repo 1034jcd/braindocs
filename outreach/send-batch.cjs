@@ -106,7 +106,7 @@ function alreadySent(email) {
     } catch (e) {
       console.log("FAIL", r.email, e.message.slice(0, 120));
     }
-    await new Promise(res => setTimeout(res, 45000)); // 45s spacing protects deliverability
+    await new Promise(res => setTimeout(res, 30000)); // 45s spacing protects deliverability
   }
   console.log("Batch done. Log:", logPath);
 })().catch(e => { console.error(e); process.exit(1); });
