@@ -18,7 +18,7 @@ jobs:
           REPORT_TO: ${{ secrets.ADMIN_EMAIL }}
         run: |
           fails=""
-          for name_url in "braindocs:https://braindocs-7qqx.onrender.com/api/healthz" "brainadvisor:https://brainadvisor.onrender.com/api/ping" "brainapi:https://brainapi-1bcu.onrender.com/api/health" "brainb2b:https://brainb2b.onrender.com/api/health" "mystic-cookie:https://mystic-cookie.onrender.com/api/health"; do
+          for name_url in "braindocs:https://braindocs.cloudflare-family.workers.dev/" "brainadvisor:https://brainadvisor.cloudflare-family.workers.dev/" "brainapi:https://brainapi.cloudflare-family.workers.dev/" "brainb2b:https://brainb2b.cloudflare-family.workers.dev/" "mystic-cookie:https://mystic-cookie.cloudflare-family.workers.dev/" "braintrader:https://braintrader.cloudflare-family.workers.dev/"; do
             name="${name_url%%:*}"; url="${name_url#*:}"
             code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$url" || echo DOWN)
             if [ "$code" != "200" ]; then

@@ -71,7 +71,7 @@ function loadProspects() {
       const o = {};
       headers.forEach((h, i) => o[h] = (c[i] || "").trim());
       return o;
-    }).filter(r => r.email && r.email.includes("@") && r.status !== "junk");
+    }).filter(r => r.email && r.email.includes("@") && r.status !== "junk" && (process.env.OUTREACH_ALLOW_WORLD === "1" || !r.country || r.country === "US"));
   }
   return [];
 }
