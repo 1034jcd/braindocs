@@ -1,4 +1,188 @@
 name,business,niche,city,state,source,link,contact,email,status,notes
-,,mobile mechanic,San Antonio,TX,craigslist,https://sanantonio.craigslist.org/search/sso?query=mobile%20mechanic,,,,search "mobile mechanic" under Services
 DA Mobile Mechanic,DA Mobile Mechanic,mobile mechanic,San Antonio,TX,website,https://damechanic.com,da.mechanic@outlook.com,da.mechanic@outlook.com,new,verified email from site contact page
 Mobile Master Mechanic,Mobile Master Mechanic,mobile mechanic,San Antonio,TX,website,https://mobilemastermechanic.com,support@mobilemastermechanic.com,support@mobilemastermechanic.com,new,verified email from site contact page
+Elite Mobile Services,Elite Mobile Services,mobile mechanic,austin,TX,bookmobilemechanic,https://www.elitemobileservices.com,contact@elitemobileservice.com,contact@elitemobileservice.com,new,
+Guerrero Mobile Mechanics,Guerrero Mobile Mechanics,mobile mechanic,austin,TX,bookmobilemechanic,https://guerreromobilemechanics.com,inquiries@guerreromobilemechanics.com,inquiries@guerreromobilemechanics.com,new,
+B n B Mobile Mechanic,B n B Mobile Mechanic,mobile mechanic,houston,TX,bookmobilemechanic,https://bnbautomotiveservices.com,jonpinhorn.typedesign@gmail.com,jonpinhorn.typedesign@gmail.com,new,
+Mobile Mechanic Plus,Mobile Mechanic Plus,mobile mechanic,houston,TX,bookmobilemechanic,https://www.mobilemechanicofhouston.com,mobilemechanic2018@outlook.com,mobilemechanic2018@outlook.com,new,
+,mysanantonio.com,plumber,San Antonio,TX,ddg,https://mysanantonio.com,news@mysa.com,news@mysa.com,junk,placeholder/directory email
+,saplumbing.net,plumber,San Antonio,TX,ddg,https://saplumbing.net,general@sanantonioplumbing.co,general@sanantonioplumbing.co,new,
+,expertise.com,plumber,San Antonio,TX,ddg,https://expertise.com,info@expertise.com,info@expertise.com,junk,placeholder/directory email
+,rhinoroofers.com,roofer,San Antonio,TX,ddg,https://rhinoroofers.com,example@email.com,example@email.com,junk,placeholder/directory email
+,alamoroofing.com,roofer,San Antonio,TX,ddg,https://alamoroofing.com,info@alamoroofing.com,info@alamoroofing.com,new,
+,mysanantonioroofer.com,roofer,San Antonio,TX,ddg,https://mysanantonioroofer.com,name@email.com,name@email.com,junk,placeholder/directory email
+,wbroofing.com,roofer,San Antonio,TX,ddg,https://wbroofing.com,reroof@wbroofing.com,reroof@wbroofing.com,new,
+,kapsrc.com,roofer,San Antonio,TX,ddg,https://kapsrc.com,larry@kapsrc.com,larry@kapsrc.com,new,
+,roofpitch.net,roofer,San Antonio,TX,ddg,https://roofpitch.net,contact@roofpitch.net,contact@roofpitch.net,new,
+,freshlawn.com,lawn care,San Antonio,TX,ddg,https://freshlawn.com,support@freshlawn.com,support@freshlawn.com,new,
+,emeraldlawns.com,lawn care,San Antonio,TX,ddg,https://emeraldlawns.com,contact@power.com,contact@power.com,junk,placeholder/directory email
+,thickgreenhealthy.com,lawn care,San Antonio,TX,ddg,https://thickgreenhealthy.com,info@thickgreenhealthy.com,info@thickgreenhealthy.com,new,
+,alamomowing.com,lawn care,San Antonio,TX,ddg,https://alamomowing.com,alamomowing@gmail.com,alamomowing@gmail.com,new,
+,landscapingbbs.com,lawn care,San Antonio,TX,ddg,https://landscapingbbs.com,contact@landscapingbbs.com,contact@landscapingbbs.com,new,
+,groundsguys.com,lawn care,San Antonio,TX,ddg,https://groundsguys.com,name@domain.com,name@domain.com,junk,placeholder/directory email
+,that1painter.com,painter,San Antonio,TX,ddg,https://that1painter.com,info@that1painter.com,info@that1painter.com,new,
+,satxpainters.com,painter,San Antonio,TX,ddg,https://satxpainters.com,contact@satxpainters.com,contact@satxpainters.com,new,
+,painterssanantoniotx.com,painter,San Antonio,TX,ddg,https://painterssanantoniotx.com,contact@painterssanantoniotx.com,contact@painterssanantoniotx.com,new,
+,revivalpaintingtx.com,painter,San Antonio,TX,ddg,https://revivalpaintingtx.com,hello@fogdigitalmarketing.com,hello@fogdigitalmarketing.com,new,
+,sahits.com,painter,San Antonio,TX,ddg,https://sahits.com,your@email.com,your@email.com,new,
+,allgoodelectric.com,electrician,San Antonio,TX,ddg,https://allgoodelectric.com,troy@allgoodelectric.com,troy@allgoodelectric.com,new,
+,suahandyman.com,handyman,San Antonio,TX,ddg,https://suahandyman.com,soardefenders@gmail.com,soardefenders@gmail.com,new,
+,handymanhub.com,handyman,San Antonio,TX,ddg,https://handymanhub.com,info@handymanhub.com,info@handymanhub.com,new,
+,sirhandymanservices.com,handyman,San Antonio,TX,ddg,https://sirhandymanservices.com,percival@sirhandymanservices.com,percival@sirhandymanservices.com,new,
+,samuelshandymanservice.com,handyman,San Antonio,TX,ddg,https://samuelshandymanservice.com,samuelshandymanservice@gmail.com,samuelshandymanservice@gmail.com,new,
+,seanshandymanservices.com,handyman,San Antonio,TX,ddg,https://seanshandymanservices.com,seanjameshandyman@gmail.com,seanjameshandyman@gmail.com,new,
+,getspruce.com,house cleaner,San Antonio,TX,ddg,https://getspruce.com,service@getspruce.com,service@getspruce.com,new,
+
+,mylupeshousecleaning.co,house cleaner,San Antonio,TX,ddg,https://mylupeshousecleaning.co,emailus@mylupeshousecleaning.co,emailus@mylupeshousecleaning.co,new,
+
+,maidsonamissionus.com,house cleaner,San Antonio,TX,ddg,https://maidsonamissionus.com,info@maidsonamissionus.com,info@maidsonamissionus.com,new,
+
+,sparklymaidsanantonio.com,house cleaner,San Antonio,TX,ddg,https://sparklymaidsanantonio.com,user@domain.com,user@domain.com,new,
+
+,hellamaid.com,house cleaner,San Antonio,TX,ddg,https://hellamaid.com,support@hellamaid.com,support@hellamaid.com,new,
+
+,sanantoniopressurewashing.com,pressure washing,San Antonio,TX,ddg,https://sanantoniopressurewashing.com,kobe.martinez@sanantoniopressurewashing.com,kobe.martinez@sanantoniopressurewashing.com,new,
+
+,210pressurewashing.com,pressure washing,San Antonio,TX,ddg,https://210pressurewashing.com,210pressurewashing@gmail.com,210pressurewashing@gmail.com,new,
+
+,supremepowerwash.com,pressure washing,San Antonio,TX,ddg,https://supremepowerwash.com,sales@supremepowerwash.com,sales@supremepowerwash.com,new,
+
+,texaspureclean.com,pressure washing,San Antonio,TX,ddg,https://texaspureclean.com,bill@texaspureclean.com,bill@texaspureclean.com,new,
+
+,powerwashsa.com,pressure washing,San Antonio,TX,ddg,https://powerwashsa.com,hello@sahomepros.com,hello@sahomepros.com,new,
+
+,texasscrubhub.com,pressure washing,San Antonio,TX,ddg,https://texasscrubhub.com,cleanbins@texasscrubhub.com,cleanbins@texasscrubhub.com,new,
+
+,torrespressurewashing.com,pressure washing,San Antonio,TX,ddg,https://torrespressurewashing.com,info@torrespressurewashing.com,info@torrespressurewashing.com,new,
+
+,eagerbeaverpowerwashing.com,pressure washing,San Antonio,TX,ddg,https://eagerbeaverpowerwashing.com,frank.ruiz@gofilta.com,frank.ruiz@gofilta.com,new,
+
+,maxcraftdetailing.com,auto detailer,San Antonio,TX,ddg,https://maxcraftdetailing.com,maxcraftdetailing@gmail.com,maxcraftdetailing@gmail.com,new,
+
+,thedetailcode.com,auto detailer,San Antonio,TX,ddg,https://thedetailcode.com,amber@thedetailcode.com,amber@thedetailcode.com,new,
+
+,freshstartdetailers.com,auto detailer,San Antonio,TX,ddg,https://freshstartdetailers.com,customerservice@freshstartdetailers.com,customerservice@freshstartdetailers.com,new,
+
+,alamoautoaesthetics.com,auto detailer,San Antonio,TX,ddg,https://alamoautoaesthetics.com,alamoautoaesthetics@gmail.com,alamoautoaesthetics@gmail.com,new,
+
+,craneautodetailing.com,auto detailer,San Antonio,TX,ddg,https://craneautodetailing.com,info@craneautodetailing.com,info@craneautodetailing.com,new,
+
+,1detailatatime.com,auto detailer,San Antonio,TX,ddg,https://1detailatatime.com,rromerojr1@gmail.com,rromerojr1@gmail.com,new,
+
+,austinsgreatestplumbing.com,plumber,Austin,TX,ddg,https://austinsgreatestplumbing.com,customerservice@acaciasplumbing.com,customerservice@acaciasplumbing.com,new,
+
+,peanutplumbingtx.com,plumber,Austin,TX,ddg,https://peanutplumbingtx.com,peanutplumbing@gmail.com,peanutplumbing@gmail.com,new,
+
+,plumbinatoraustin.com,plumber,Austin,TX,ddg,https://plumbinatoraustin.com,wendyslove@gmail.com,wendyslove@gmail.com,new,
+
+,statesman.com,plumber,Austin,TX,ddg,https://statesman.com,ybarra-@photo.jay,ybarra-@photo.jay,new,
+
+,austin-plumber.com,plumber,Austin,TX,ddg,https://austin-plumber.com,christian@adeptplumbing.com,christian@adeptplumbing.com,new,
+
+,austinplumbing.com,plumber,Austin,TX,ddg,https://austinplumbing.com,service@austinplumbing.com,service@austinplumbing.com,new,
+
+,homeservicespros.com,plumber,Austin,TX,ddg,https://homeservicespros.com,hello@homeservicespros.com,hello@homeservicespros.com,new,
+
+,austinroofer.com,roofer,Austin,TX,ddg,https://austinroofer.com,info@austinroofer.com,info@austinroofer.com,new,
+
+,austinarearoofers.com,roofer,Austin,TX,ddg,https://austinarearoofers.com,info@austinarearoofers.com,info@austinarearoofers.com,new,
+
+,rooftxconstruction.com,roofer,Austin,TX,ddg,https://rooftxconstruction.com,info@rooftxconstruction.com,info@rooftxconstruction.com,new,
+
+,arkroofer.com,roofer,Austin,TX,ddg,https://arkroofer.com,office@arkroofer.com,office@arkroofer.com,new,
+
+,priorityroofs.com,roofer,Austin,TX,ddg,https://priorityroofs.com,newmexico@priorityroofs.com,newmexico@priorityroofs.com,new,
+
+,austinroofingcompany.us,roofer,Austin,TX,ddg,https://austinroofingcompany.us,admin@austinroofingcompany.us,admin@austinroofingcompany.us,new,
+
+,wilsonroofing.com,roofer,Austin,TX,ddg,https://wilsonroofing.com,info@wilsonroofing.com,info@wilsonroofing.com,new,
+
+,grassworksaustin.com,lawn care,Austin,TX,ddg,https://grassworksaustin.com,info@grassworksaustin.com,info@grassworksaustin.com,new,
+
+,lawncareaustintx.com,lawn care,Austin,TX,ddg,https://lawncareaustintx.com,info@lawncareaustintx.com,info@lawncareaustintx.com,new,
+
+,lawncareservicesaustin.com,lawn care,Austin,TX,ddg,https://lawncareservicesaustin.com,karenfaulk774@gmail.com,karenfaulk774@gmail.com,new,
+
+,catheyslawncare.com,lawn care,Austin,TX,ddg,https://catheyslawncare.com,catheyslandscapes@gmail.com,catheyslandscapes@gmail.com,new,
+
+,texpainting.com,painter,Austin,TX,ddg,https://texpainting.com,info@texpainting.com,info@texpainting.com,new,
+
+,texaspridepaintingllc.com,painter,Austin,TX,ddg,https://texaspridepaintingllc.com,info@texaspridepaintingllc.com,info@texaspridepaintingllc.com,new,
+
+,paintersaustintx.com,painter,Austin,TX,ddg,https://paintersaustintx.com,contact@paintersaustintx.com,contact@paintersaustintx.com,new,
+
+,consumeraffairs.com,electrician,Austin,TX,ddg,https://consumeraffairs.com,0954ab4f6a2d469b816f8ed8a2d0f5da@stderr.consumeraffairs.com,0954ab4f6a2d469b816f8ed8a2d0f5da@stderr.consumeraffairs.com,new,
+
+,terrapinelectric.com,electrician,Austin,TX,ddg,https://terrapinelectric.com,info@terrapinelectric.com,info@terrapinelectric.com,new,
+
+,handymanaustintx.net,handyman,Austin,TX,ddg,https://handymanaustintx.net,info@handymanaustintx.net,info@handymanaustintx.net,new,
+
+,theatxhandyman.com,handyman,Austin,TX,ddg,https://theatxhandyman.com,help@theatxhandyman.com,help@theatxhandyman.com,new,
+
+,myaustinhandyman.com,handyman,Austin,TX,ddg,https://myaustinhandyman.com,contact@sansoxygen.com,contact@sansoxygen.com,new,
+
+,austinhousecleaners.com,house cleaner,Austin,TX,ddg,https://austinhousecleaners.com,austinhousecleaners@gmail.com,austinhousecleaners@gmail.com,new,
+
+,sweptupcleaningatx.com,house cleaner,Austin,TX,ddg,https://sweptupcleaningatx.com,you@email.com,you@email.com,new,
+
+,austintxcleaningcrew.com,house cleaner,Austin,TX,ddg,https://austintxcleaningcrew.com,support@austintxcleaningcrew.com,support@austintxcleaningcrew.com,new,
+
+,airtasker.com,house cleaner,Austin,TX,ddg,https://airtasker.com,support@airtasker.com,support@airtasker.com,new,
+
+,pressurewasheraustin.com,pressure washing,Austin,TX,ddg,https://pressurewasheraustin.com,info@pressurewasheraustin.com,info@pressurewasheraustin.com,new,
+
+,hillcountrypressurewash.com,pressure washing,Austin,TX,ddg,https://hillcountrypressurewash.com,hillcopressurewash@gmail.com,hillcopressurewash@gmail.com,new,
+
+,powerwashaustin.com,pressure washing,Austin,TX,ddg,https://powerwashaustin.com,care@atxcleanllc.com,care@atxcleanllc.com,new,
+
+,pressurewashingofaustin.com,pressure washing,Austin,TX,ddg,https://pressurewashingofaustin.com,pressurewashingofaustin@gmail.com,pressurewashingofaustin@gmail.com,new,
+
+,washaustin.com,pressure washing,Austin,TX,ddg,https://washaustin.com,washaustin@atx-softwash.com,washaustin@atx-softwash.com,new,
+
+,activatepressurewashing.com,pressure washing,Austin,TX,ddg,https://activatepressurewashing.com,christian@activatepw.com,christian@activatepw.com,new,
+
+,atxpurepressure.com,pressure washing,Austin,TX,ddg,https://atxpurepressure.com,example@mysite.com,example@mysite.com,new,
+
+,austinpressurewashingservices.com,pressure washing,Austin,TX,ddg,https://austinpressurewashingservices.com,eugene.apws@gmail.com,eugene.apws@gmail.com,new,
+
+,austinpressurewashing.co,pressure washing,Austin,TX,ddg,https://austinpressurewashing.co,austin@austinpressurewashing.co,austin@austinpressurewashing.co,new,
+
+,padtx.com,auto detailer,Austin,TX,ddg,https://padtx.com,wesley@padtx.com,wesley@padtx.com,new,
+
+,thewaxshackdetailing.com,auto detailer,Austin,TX,ddg,https://thewaxshackdetailing.com,george@thewaxshackdetailing.com,george@thewaxshackdetailing.com,new,
+
+,anaautodetailing.com,auto detailer,Austin,TX,ddg,https://anaautodetailing.com,610aaautodetailing@gmail.com,610aaautodetailing@gmail.com,new,
+
+,rinsodetail.com,auto detailer,Austin,TX,ddg,https://rinsodetail.com,rinsoauto@gmail.com,rinsoauto@gmail.com,new,
+
+,austin-autodetail.com,auto detailer,Austin,TX,ddg,https://austin-autodetail.com,info@signaturemobiledetailaz.com,info@signaturemobiledetailaz.com,new,
+
+,met-plumbing.com,plumber,Houston,TX,ddg,https://met-plumbing.com,csr@metplumbing.com,csr@metplumbing.com,new,
+
+,nicksplumbing.com,plumber,Houston,TX,ddg,https://nicksplumbing.com,service@nicksplumbing.com,service@nicksplumbing.com,new,
+
+,fyi.group,plumber,Houston,TX,ddg,https://fyi.group,david@ascendlymarketing.com,david@ascendlymarketing.com,new,
+
+,rooftek.com,roofer,Houston,TX,ddg,https://rooftek.com,jake@rooftek.com,jake@rooftek.com,new,
+
+,riseroofinghouston.com,roofer,Houston,TX,ddg,https://riseroofinghouston.com,office@riseroofinghouston.com,office@riseroofinghouston.com,new,
+
+,mmroofsiding.com,roofer,Houston,TX,ddg,https://mmroofsiding.com,info@mmroofsiding.com,info@mmroofsiding.com,new,
+
+,txroofingandservices.com,roofer,Houston,TX,ddg,https://txroofingandservices.com,info@txroofingandservices.com,info@txroofingandservices.com,new,
+
+,roseroofing.com,roofer,Houston,TX,ddg,https://roseroofing.com,office@roseroofing.com,office@roseroofing.com,new,
+
+,houstonroofingonline.com,roofer,Houston,TX,ddg,https://houstonroofingonline.com,info@myhrc.biz,info@myhrc.biz,new,
+
+,naturalawn.com,lawn care,Houston,TX,ddg,https://naturalawn.com,begreen@naturalawn.com,begreen@naturalawn.com,new,
+
+,houstonlawncaresolutions.com,lawn care,Houston,TX,ddg,https://houstonlawncaresolutions.com,info@houstonlawncaresolutions.com,info@houstonlawncaresolutions.com,new,
+
+,evergreenlawncaretx.com,lawn care,Houston,TX,ddg,https://evergreenlawncaretx.com,jorge@evergreenoutdoorservicestx.com,jorge@evergreenoutdoorservicestx.com,new,
+
+,houstontexaspainters.com,painter,Houston,TX,ddg,https://houstontexaspainters.com,support@houstontexaspainters.com,support@houstontexaspainters.com,new,
+
+,nicepainter.com,painter,Houston,TX,ddg,https://nicepainter.com,tim@nicepainter.com,tim@nicepainter.com,new,
+
+,houstonsuperiorpainting.com,painter,Houston,TX,ddg,https://houstonsuperiorpainting.com,info@houstonsuperiorpainting.com,info@houstonsuperiorpainting.com,new,
