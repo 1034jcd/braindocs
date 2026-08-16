@@ -10,7 +10,7 @@ jobs:
   keep-alive:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Ping BrainDocs and alert on failure
         env:
           SMTP_USER: ${{ secrets.SMTP_USER }}
@@ -43,7 +43,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '45 8 * * *' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install deps
         run: |
           mkdir -p /tmp/mkt-deps
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '30 13 * * *' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install deps
         run: |
           mkdir -p /tmp/rec-deps
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '15 8 * * 1' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Resubmit pSEO URLs to IndexNow
         run: node scripts/indexnow.cjs
 
@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '0 9 * * 1' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install deps
         run: |
           mkdir -p /tmp/sec-deps
@@ -102,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.schedule == '45 8 * * *' || github.event_name == 'workflow_dispatch' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install deps
         run: |
           mkdir -p /tmp/revenue-deps
