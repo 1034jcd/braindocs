@@ -21,11 +21,12 @@ jobs:
           for name_url in "braindocs:https://braindocs.cloudflare-family.workers.dev/" "brainadvisor:https://brainadvisor.cloudflare-family.workers.dev/" "brainapi:https://brainapi.cloudflare-family.workers.dev/" "brainb2b:https://brainb2b.cloudflare-family.workers.dev/" "mystic-cookie:https://mystic-cookie.cloudflare-family.workers.dev/" "braintrader:https://braintrader.cloudflare-family.workers.dev/"; do
             name="${name_url%%:*}"; url="${name_url#*:}"
             code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$url" || echo DOWN)
-            if [ "$code" != "200" ]; then
-              echo "$name cold-start retry..."
-              sleep 5
+            for attempt in 2 3; do
+              [ "$code" = "200" ] && break
+              echo "$name attempt $attempt (backoff 20s)..."
+              sleep 20
               code=$(curl -s -o /dev/null -w '%{http_code}' -m 45 "$url" || echo DOWN)
-            fi
+            done
             echo "$name -> $code"
             [ "$code" != "200" ] && fails="$fails $name($code)"
           done
