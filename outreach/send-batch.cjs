@@ -12,7 +12,7 @@ const path = require("path");
 const nodemailer = require("nodemailer");
 
 const SEND = process.argv.includes("--send");
-const DAILY_CAP = Number(process.env.OUTREACH_DAILY_CAP || 15);
+const DAILY_CAP = Number(process.env.OUTREACH_DAILY_CAP || 25);
 const ROOT = path.join(__dirname, "..");
 
 function env(k) {
