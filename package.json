@@ -10,7 +10,7 @@
     "express": "^5.3.0",
     "express-rate-limit": "^7.5.0",
     "helmet": "^8.3.0",
-    "nodemailer": "^9.0.1",
+    "nodemailer": "^10.1.4",
     "stripe": "^23.0.0"
   }
 }
