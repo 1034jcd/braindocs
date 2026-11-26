@@ -1,7 +1,7 @@
 import express from "express";
 import helmet from "helmet";
 import Stripe from "stripe";
-import rateLimit from "express-rate-limit";
+import rateLimit, { ipKeyGenerator } from "express-rate-limit";
 import nodemailer from "nodemailer";
 import https from "node:https";
 import http from "node:http";
@@ -45,7 +45,7 @@ const checkoutLimiter = rateLimit({
   max: 10,
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req) => req.headers["x-forwarded-for"]?.toString() || req.ip || "anon",
+  keyGenerator: (req) => req.headers["x-forwarded-for"]?.toString() || ipKeyGenerator(req.ip) || "anon",
 });
 
 app.get("/api/healthz", (_req, res) => res.json({ ok: true, service: "braindocs" }));
@@ -239,7 +239,7 @@ async function aiChat(systemMsg, userMsg) {
   throw new Error("All AI providers failed — " + errors.join(" | "));
 }
 
-const aiLimiter = rateLimit({ windowMs: 60 * 1000, max: 8, standardHeaders: true, legacyHeaders: false, keyGenerator: (req) => req.headers["x-forwarded-for"]?.toString() || req.ip || "anon" });
+const aiLimiter = rateLimit({ windowMs: 60 * 1000, max: 8, standardHeaders: true, legacyHeaders: false, keyGenerator: (req) => req.headers["x-forwarded-for"]?.toString() || ipKeyGenerator(req.ip) || "anon" });
 
 app.get("/api/ai/status", (_req, res) => {
   res.json({
