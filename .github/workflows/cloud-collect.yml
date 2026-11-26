@@ -9,7 +9,7 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install node deps
         run: node --version && npm init -y >/dev/null 2>&1 || true
       - name: Collect world prospects (cloud runners, zero user data)
